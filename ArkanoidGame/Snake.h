@@ -4,7 +4,7 @@
 #include <list>
 #include <array>
 
-namespace SnakeGame
+namespace ArkanoidGame
 {
 	enum class SnakeDirection
 	{

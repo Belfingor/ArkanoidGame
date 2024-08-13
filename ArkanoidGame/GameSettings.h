@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace SnakeGame
+namespace ArkanoidGame
 {
 	// Resources path
 	const std::string RESOURCES_PATH = "Resources/";
@@ -25,5 +25,5 @@ namespace SnakeGame
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some CPP
 
-	const std::string GAME_NAME = "SnakeGame";
+	const std::string GAME_NAME = "ArkanoidGame";
 }

@@ -1,12 +1,19 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-namespace SnakeGame
+namespace ArkanoidGame
 {
 	class Game;
 
-	struct GameStateGameOverData
+	class GameStateGameOverData
 	{
+	public:
+		void Init();
+		void HandleWindowEvent(const sf::Event& event);
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
+
+	private:
 		// Resources
 		sf::Font font;
 
@@ -18,11 +25,4 @@ namespace SnakeGame
 		sf::Text hintText;
 		std::vector<sf::Text> recordsTableTexts;
 	};
-
-	// Returns pointer to the allocated data
-	void InitGameStateGameOver(GameStateGameOverData& data);
-	void ShutdownGameStateGameOver(GameStateGameOverData& data);
-	void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, const sf::Event& event);
-	void UpdateGameStateGameOver(GameStateGameOverData& data, float timeDelta);
-	void DrawGameStateGameOver(GameStateGameOverData& data, sf::RenderWindow& window);
 }

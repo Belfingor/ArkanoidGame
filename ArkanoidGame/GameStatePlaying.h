@@ -4,12 +4,19 @@
 #include "Snake.h"
 
 
-namespace SnakeGame
+namespace ArkanoidGame
 {
 	class Game;
 
-	struct GameStatePlayingData
+	class GameStatePlayingData
 	{
+	public:
+		void Init();
+		void HandleWindowEvent(const sf::Event& event);
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
+
+	private:
 		// Resources
 		sf::Texture appleTexture;
 		sf::Texture rockTexture;
@@ -32,10 +39,4 @@ namespace SnakeGame
 		sf::Sound eatAppleSound;
 		sf::Sound gameOverSound;
 	};
-
-	void InitGameStatePlaying(GameStatePlayingData& data);
-	void ShutdownGameStatePlaying(GameStatePlayingData& data);
-	void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, const sf::Event& event);
-	void UpdateGameStatePlaying(GameStatePlayingData& data, float timeDelta);
-	void DrawGameStatePlaying(GameStatePlayingData& data, sf::RenderWindow& window);
 }

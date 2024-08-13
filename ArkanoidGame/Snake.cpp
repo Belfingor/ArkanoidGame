@@ -12,26 +12,26 @@ namespace
 	const std::string BODY_BEND_TEXTURE_ID = "BodyBend";
 	const std::string TAIL_TEXTURE_ID = "Tail";
 
-	void SetHeadSprite(SnakeGame::Snake& snake, std::list<sf::Sprite>::iterator it)
+	void SetHeadSprite(ArkanoidGame::Snake& snake, std::list<sf::Sprite>::iterator it)
 	{
 		float angle = 0.f; // Up
-		if (snake.direction == SnakeGame::SnakeDirection::Right) { // Right
+		if (snake.direction == ArkanoidGame::SnakeDirection::Right) { // Right
 			angle = 90.f;
 		}
-		else if (snake.direction == SnakeGame::SnakeDirection::Down) { // Down
+		else if (snake.direction == ArkanoidGame::SnakeDirection::Down) { // Down
 			angle = 180.f;
 		}
-		else if (snake.direction == SnakeGame::SnakeDirection::Left) { // Left
+		else if (snake.direction == ArkanoidGame::SnakeDirection::Left) { // Left
 			angle = -90.f;
 		}
 
-		it->setTexture(snake.textures[(size_t)SnakeGame::SnakePart::Head]);
+		it->setTexture(snake.textures[(size_t)ArkanoidGame::SnakePart::Head]);
 		it->setRotation(angle);
 	}
 
-	void SetTailSprite(SnakeGame::Snake& snake, std::list<sf::Sprite>::iterator it)
+	void SetTailSprite(ArkanoidGame::Snake& snake, std::list<sf::Sprite>::iterator it)
 	{
-		it->setTexture(snake.textures[(size_t)SnakeGame::SnakePart::Tail]);
+		it->setTexture(snake.textures[(size_t)ArkanoidGame::SnakePart::Tail]);
 
 		auto nextIt = std::next(it);
 		if (nextIt == snake.body.end()) {
@@ -53,29 +53,29 @@ namespace
 	}
 
 	sf::Sprite GetRotationSprite(
-		SnakeGame::Snake& snake,
-		SnakeGame::SnakeDirection oldDirection, 
-		SnakeGame::SnakeDirection newDirection)
+		ArkanoidGame::Snake& snake,
+		ArkanoidGame::SnakeDirection oldDirection, 
+		ArkanoidGame::SnakeDirection newDirection)
 	{
 		sf::Sprite sprite;
-		SnakeGame::InitSprite(
+		ArkanoidGame::InitSprite(
 			sprite,
-			SnakeGame::SNAKE_SIZE,
-			SnakeGame::SNAKE_SIZE,
-			snake.textures[(size_t)SnakeGame::SnakePart::BodyBend]);
+			ArkanoidGame::SNAKE_SIZE,
+			ArkanoidGame::SNAKE_SIZE,
+			snake.textures[(size_t)ArkanoidGame::SnakePart::BodyBend]);
 		
 		float angle = 0.f;
-		if (oldDirection == SnakeGame::SnakeDirection::Right && newDirection == SnakeGame::SnakeDirection::Up ||
-			oldDirection == SnakeGame::SnakeDirection::Down && newDirection == SnakeGame::SnakeDirection::Left) {
+		if (oldDirection == ArkanoidGame::SnakeDirection::Right && newDirection == ArkanoidGame::SnakeDirection::Up ||
+			oldDirection == ArkanoidGame::SnakeDirection::Down && newDirection == ArkanoidGame::SnakeDirection::Left) {
 			angle = 0.f;
-		} else if (oldDirection == SnakeGame::SnakeDirection::Down && newDirection == SnakeGame::SnakeDirection::Right ||
-			oldDirection == SnakeGame::SnakeDirection::Left && newDirection == SnakeGame::SnakeDirection::Up) {
+		} else if (oldDirection == ArkanoidGame::SnakeDirection::Down && newDirection == ArkanoidGame::SnakeDirection::Right ||
+			oldDirection == ArkanoidGame::SnakeDirection::Left && newDirection == ArkanoidGame::SnakeDirection::Up) {
 			angle = 90.f;
-		} else if (oldDirection == SnakeGame::SnakeDirection::Left && newDirection == SnakeGame::SnakeDirection::Down ||
-			oldDirection == SnakeGame::SnakeDirection::Up && newDirection == SnakeGame::SnakeDirection::Right) {
+		} else if (oldDirection == ArkanoidGame::SnakeDirection::Left && newDirection == ArkanoidGame::SnakeDirection::Down ||
+			oldDirection == ArkanoidGame::SnakeDirection::Up && newDirection == ArkanoidGame::SnakeDirection::Right) {
 			angle = 180;
-		} else if (oldDirection == SnakeGame::SnakeDirection::Up && newDirection == SnakeGame::SnakeDirection::Left ||
-			oldDirection == SnakeGame::SnakeDirection::Right && newDirection == SnakeGame::SnakeDirection::Down) {
+		} else if (oldDirection == ArkanoidGame::SnakeDirection::Up && newDirection == ArkanoidGame::SnakeDirection::Left ||
+			oldDirection == ArkanoidGame::SnakeDirection::Right && newDirection == ArkanoidGame::SnakeDirection::Down) {
 			angle = -90.f;
 		}
 
@@ -84,7 +84,7 @@ namespace
 	}
 }
 
-namespace SnakeGame
+namespace ArkanoidGame
 {
 	void LoadSnakeTextures(Snake& snake)
 	{
@@ -166,7 +166,7 @@ namespace SnakeGame
 
 			if (width > 0.f && height > 0.f) {
 				sf::Sprite sprite;
-				InitSprite(sprite, width, height, snake.textures[(size_t)SnakeGame::SnakePart::Body]);
+				InitSprite(sprite, width, height, snake.textures[(size_t)ArkanoidGame::SnakePart::Body]);
 				auto position = (it->getPosition() + nextIt->getPosition()) / 2.f;
 				sprite.setPosition(position);
 				sprite.setRotation(angle);
