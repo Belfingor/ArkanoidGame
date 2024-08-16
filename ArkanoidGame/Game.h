@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#include "Snake.h"
 #include "Sprite.h"
 #include "GameSettings.h"
 #include "GameState.h"

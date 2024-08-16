@@ -1,7 +1,8 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
-#include "Snake.h"
+#include "Platform.h"
+#include "Ball.h"
 
 
 namespace ArkanoidGame
@@ -18,17 +19,12 @@ namespace ArkanoidGame
 
 	private:
 		// Resources
-		sf::Texture appleTexture;
-		sf::Texture rockTexture;
 		sf::Font font;
-		sf::SoundBuffer eatAppleSoundBuffer;
 		sf::SoundBuffer gameOverSoundBuffer;
 
 		// Game data
-		Snake snake;
-		sf::Sprite apple;
-		std::vector<sf::Sprite> rocks;
-		int numEatenApples = 0;
+		Platform platform;
+		Ball ball;
 
 		// UI data
 		sf::Text scoreText;
@@ -36,7 +32,6 @@ namespace ArkanoidGame
 		sf::RectangleShape background;
 
 		// Sounds
-		sf::Sound eatAppleSound;
 		sf::Sound gameOverSound;
 	};
 }

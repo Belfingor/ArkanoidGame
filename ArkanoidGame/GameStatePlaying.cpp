@@ -4,39 +4,25 @@
 #include "Text.h"
 #include <assert.h>
 #include <sstream>
+#include "Platform.h"
+#include "Math.h"
 
 namespace ArkanoidGame
 {
 	void GameStatePlayingData::Init()
 	{	
 		// Init game resources (terminate if error)
-		LoadSnakeTextures(snake);
-		assert(appleTexture.loadFromFile(TEXTURES_PATH + "Apple.png"));
-		assert(rockTexture.loadFromFile(TEXTURES_PATH + "Rock.png"));
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
-		assert(eatAppleSoundBuffer.loadFromFile(SOUNDS_PATH + "AppleEat.wav"));
 		assert(gameOverSoundBuffer.loadFromFile(SOUNDS_PATH + "Death.wav"));
 
 		// Init background
-		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEGHT));
+		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
-		background.setFillColor(sf::Color(0, 200, 0));
+		background.setFillColor(sf::Color::Blue);
 
-		// Init snake
-		InitSnake(snake);
-
-		// Init apple
-		InitSprite(apple, APPLE_SIZE, APPLE_SIZE, appleTexture);
-		SetSpriteRandomPosition(apple, background.getGlobalBounds(), snake.body);
-
-		// Init rocks
-		rocks.resize(ROCKS_COUNT);
-		for (sf::Sprite& rock : rocks) {
-			InitSprite(rock, ROCK_SIZE, ROCK_SIZE, rockTexture);
-			SetSpriteRandomPosition(rock, background.getGlobalBounds(), snake.body);
-		}
-
-		numEatenApples = 0;
+		// Init platform
+		platform.Init();
+		ball.Init();
 
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
@@ -49,7 +35,6 @@ namespace ArkanoidGame
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
 		// Init sounds
-		eatAppleSound.setBuffer(eatAppleSoundBuffer);
 		gameOverSound.setBuffer(gameOverSoundBuffer);
 	}
 
@@ -66,60 +51,19 @@ namespace ArkanoidGame
 
 	void GameStatePlayingData::Update(float timeDelta)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		platform.Update(timeDelta);
+		ball.Update(timeDelta);
+		if (DoShapesCollide(platform.GetPlatformCollider(), ball.GetBallCollider()))
 		{
-			snake.direction = SnakeDirection::Up;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			snake.direction = SnakeDirection::Right;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			snake.direction = SnakeDirection::Down;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			snake.direction = SnakeDirection::Left;
+			ball.BounceOfPlatform();
 		}
 
-		// Update snake
-		MoveSnake(snake, timeDelta);
-
-		if (CheckSpriteIntersection(*snake.head, apple)) {
-			eatAppleSound.play();
-
-			GrowSnake(snake);
-
-			// Increase eaten apples counter
-			numEatenApples++;
-			
-			// Move apple to a new random position
-			SetSpriteRandomPosition(apple, background.getGlobalBounds(), snake.body);
-
-			// Increase snake speed
-			if (Application::Instance().GetGame().IsEnableOptions(GameOptions::WithAcceleration)) {
-				snake.speed += ACCELERATION;
-			}
-		}
-
-		const bool isGameFinished = numEatenApples == MAX_APPLES && !Application::Instance().GetGame().IsEnableOptions(GameOptions::InfiniteApples);
-		
-		if (isGameFinished
-			|| !HasSnakeCollisionWithRect(snake, background.getGlobalBounds()) // Check collision with screen border
-			|| CheckSnakeCollisionWithHimself(snake)		// Check collision with screen border
-			|| FullCheckCollisions(rocks.begin(), rocks.end(), *snake.head)) // Check collision with rocks
+		if (ball.IsGameLost())
 		{
-			gameOverSound.play();
-			
 			Game& game = Application::Instance().GetGame();
-
-			// Find snake in records table and update his score
-			game.UpdateRecord(PLAYER_NAME, numEatenApples);
 			game.PushState(GameStateType::GameOver, false);
+			gameOverSound.play();
 		}
-
-		scoreText.setString("Apples eaten: " + std::to_string(numEatenApples));
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -128,11 +72,8 @@ namespace ArkanoidGame
 		window.draw(background);
 
 		// Draw snake
-		DrawSnake(snake, window);
-		// Draw apples
-		DrawSprite(apple, window);
-		// Draw rocks
-		DrawSprites(rocks.begin(), rocks.end(), window);
+		platform.Draw(window);
+		ball.Draw(window);
 
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);

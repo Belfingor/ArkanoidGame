@@ -37,13 +37,19 @@
     <ClCompile Include="Text.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Snake.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="GameState.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,9 +81,17 @@
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
-    <ClInclude Include="Snake.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="GameState.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

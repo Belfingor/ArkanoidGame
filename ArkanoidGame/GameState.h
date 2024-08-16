@@ -46,10 +46,9 @@ namespace ArkanoidGame
 		void Update(float timeDelta);
 		void Draw(sf::RenderWindow& window);
 		void HandleWindowEvent(sf::Event& event);
-	private:
-		void* CopyData(const GameState& state) const;
 
 	private:
+		void* CopyData(const GameState& state) const;
 		GameStateType type = GameStateType::None;
 		void* data = nullptr;
 		bool isExclusivelyVisible = false;

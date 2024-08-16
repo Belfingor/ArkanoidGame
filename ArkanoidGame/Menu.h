@@ -31,8 +31,6 @@ namespace ArkanoidGame
 	public:
 		void Init(const MenuItem& item);
 
-		void Update(float deltaTime);
-
 		void Draw(sf::RenderWindow& window, sf::Vector2f position, sf::Vector2f origin);
 
 		void PressOnSelectedItem();	// press on selected menu item
