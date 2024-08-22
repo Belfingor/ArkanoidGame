@@ -3,6 +3,7 @@
 #include "SFML/Audio.hpp"
 #include "Platform.h"
 #include "Ball.h"
+#include <vector>
 
 
 namespace ArkanoidGame
@@ -23,8 +24,7 @@ namespace ArkanoidGame
 		sf::SoundBuffer gameOverSoundBuffer;
 
 		// Game data
-		Platform platform;
-		Ball ball;
+		std::vector<std::shared_ptr<GameObject>> gameObjects;
 
 		// UI data
 		sf::Text scoreText;

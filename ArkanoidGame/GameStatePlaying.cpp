@@ -20,9 +20,14 @@ namespace ArkanoidGame
 		background.setPosition(0.f, 0.f);
 		background.setFillColor(sf::Color::Blue);
 
-		// Init platform
-		platform.Init();
-		ball.Init();
+		// Init GameObjects
+		gameObjects.emplace_back(std::make_shared<Platform>());
+		gameObjects.emplace_back(std::make_shared<Ball>());
+		for (auto&& object : gameObjects)
+		{
+			object->Init();
+		}
+
 
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
@@ -51,14 +56,20 @@ namespace ArkanoidGame
 
 	void GameStatePlayingData::Update(float timeDelta)
 	{
-		platform.Update(timeDelta);
-		ball.Update(timeDelta);
-		if (DoShapesCollide(platform.GetPlatformCollider(), ball.GetBallCollider()))
+		for (auto&& object : gameObjects)
 		{
-			ball.BounceOfPlatform();
+			object->Update(timeDelta);
 		}
 
-		if (ball.IsGameLost())
+		Platform* platform = (Platform*)gameObjects[0].get();
+		Ball* ball = (Ball*)gameObjects[1].get();
+
+		if (DoShapesCollide(platform->GetPlatformCollider(), ball->GetBallCollider()))
+		{
+			ball->BounceOfPlatform();
+		}
+
+		if (ball->IsGameLost())
 		{
 			Game& game = Application::Instance().GetGame();
 			game.PushState(GameStateType::GameOver, false);
@@ -72,8 +83,10 @@ namespace ArkanoidGame
 		window.draw(background);
 
 		// Draw snake
-		platform.Draw(window);
-		ball.Draw(window);
+		for (auto&& object : gameObjects)
+		{
+			object->Draw(window);
+		}
 
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);

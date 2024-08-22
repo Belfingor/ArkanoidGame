@@ -4,16 +4,17 @@
 #include "GameSettings.h"
 #include "Sprite.h"
 #include "Math.h"
+#include "GameObject.h"
 
 
 namespace ArkanoidGame
 {
-	class Ball
+	class Ball : public GameObject
 	{
 	public:
-		void Init();
-		void Update(float timeDelta);
-		void Draw(sf::RenderWindow& window);
+		void Init() override;
+		void Update(float timeDelta)override;
+		//void Draw(sf::RenderWindow& window);
 		Circle GetBallCollider();
 		void BounceOfPlatform();
 		void BounceOfTheWall();
@@ -22,11 +23,11 @@ namespace ArkanoidGame
 
 
 	private:
-		sf::Sprite ballSprite;
-		sf::Texture ballTexture;
+		/*sf::Sprite ballSprite;
+		sf::Texture ballTexture;*/
 		sf::Vector2f ballPosition;
-		int ballVelocityXModifier = 1;
-		int ballVelocityYModifier = 1;
+		int ballVelocityModifierX = 1;
+		int ballVelocityModifierY = 1;
 	};
 
 }

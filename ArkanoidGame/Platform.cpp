@@ -7,9 +7,9 @@ namespace ArkanoidGame
 	{
 		platformPosition.x = SCREEN_WIDTH / 2.f;
 		platformPosition.y = SCREEN_HEIGHT - platformHeight / 2.f;
-		assert(platformTexture.loadFromFile(RESOURCES_PATH + "Textures/" + "Platform_A.png"));
-		InitSprite(platformSprite, platformWidth, platformHeight, platformTexture);
-		platformSprite.setPosition(platformPosition.x, platformPosition.y);
+		assert(texture.loadFromFile(RESOURCES_PATH + "Textures/" + "Platform_A.png"));
+		InitSprite(sprite, platformWidth, platformHeight, texture);
+		sprite.setPosition(platformPosition.x, platformPosition.y);
 	}
 
 	void Platform::MovePlatform(float timeDelta)
@@ -24,15 +24,22 @@ namespace ArkanoidGame
 		}
 	}
 
+	//void Draw(sf::RenderWindow& window);
+
+	Rectangle Platform::GetPlatformCollider()
+	{
+		return { { platformPosition.x - platformWidth / 2.f, platformPosition.y - platformHeight / 2.f },{ platformWidth, platformHeight } };
+	}
+
 	void Platform::Update(float timeDelta)
 	{
 		MovePlatform(timeDelta);
-		platformSprite.setPosition(platformPosition.x, platformPosition.y);
+		sprite.setPosition(platformPosition.x, platformPosition.y);
 	}
 
-	void Platform::Draw(sf::RenderWindow& window)
-	{
-		window.draw(platformSprite);
-	}
+	//void Platform::Draw(sf::RenderWindow& window)
+	//{
+	//	window.draw(platformSprite);
+	//}
 
 }

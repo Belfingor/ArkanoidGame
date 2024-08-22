@@ -8,24 +8,24 @@ namespace ArkanoidGame
 
 	void ArkanoidGame::Ball::Init()
 	{
-		assert(ballTexture.loadFromFile(RESOURCES_PATH + "Textures/" + "Ball.png"));
-		InitSprite(ballSprite, BALL_SIZE, BALL_SIZE, ballTexture);
+		assert(texture.loadFromFile(RESOURCES_PATH + "Textures/" + "Ball.png"));
+		InitSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
 		ballPosition = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-		ballSprite.setPosition(ballPosition.x, ballPosition.y);
+		sprite.setPosition(ballPosition.x, ballPosition.y);
 	}
 
 	void Ball::Update(float timeDelta)
 	{
-		ballPosition = { (ballPosition.x + BALL_SPEED * ballVelocityXModifier * timeDelta) ,
-						 (ballPosition.y + BALL_SPEED * ballVelocityYModifier * timeDelta) };
-		ballSprite.setPosition(ballPosition.x, ballPosition.y);
+		ballPosition = { (ballPosition.x + BALL_SPEED * ballVelocityModifierX * timeDelta) ,
+						 (ballPosition.y + BALL_SPEED * ballVelocityModifierY * timeDelta) };
+		sprite.setPosition(ballPosition.x, ballPosition.y);
 		Ball::BounceOfTheWall();
 	}
 
-	void Ball::Draw(sf::RenderWindow& window)
-	{
-		window.draw(ballSprite);
-	}
+	//void Ball::Draw(sf::RenderWindow& window)
+	//{
+	//	window.draw(ballSprite);
+	//}
 
 	Circle Ball::GetBallCollider()
 	{
@@ -34,18 +34,18 @@ namespace ArkanoidGame
 
 	void Ball::BounceOfPlatform()
 	{
-		ballVelocityYModifier *= -1;
+		ballVelocityModifierY *= -1;
 	}
 
 	void Ball::BounceOfTheWall()
 	{
 		if (ballPosition.x > SCREEN_WIDTH - BALL_SIZE / 2 || ballPosition.x < BALL_SIZE / 2)
 		{
-			ballVelocityXModifier *= -1;
+			ballVelocityModifierX *= -1;
 		}
 		if (ballPosition.y < BALL_SIZE / 2)
 		{
-			ballVelocityYModifier *= -1;
+			ballVelocityModifierY *= -1;
 		}
 	}
 
