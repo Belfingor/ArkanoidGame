@@ -2,7 +2,6 @@
 
 namespace ArkanoidGame
 {
-
 	void Platform::Init()
 	{
 		platformPosition.x = SCREEN_WIDTH / 2.f;
@@ -24,8 +23,6 @@ namespace ArkanoidGame
 		}
 	}
 
-	//void Draw(sf::RenderWindow& window);
-
 	Rectangle Platform::GetPlatformCollider()
 	{
 		return { { platformPosition.x - platformWidth / 2.f, platformPosition.y - platformHeight / 2.f },{ platformWidth, platformHeight } };
@@ -36,10 +33,5 @@ namespace ArkanoidGame
 		MovePlatform(timeDelta);
 		sprite.setPosition(platformPosition.x, platformPosition.y);
 	}
-
-	//void Platform::Draw(sf::RenderWindow& window)
-	//{
-	//	window.draw(platformSprite);
-	//}
 
 }

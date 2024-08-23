@@ -22,8 +22,17 @@ namespace ArkanoidGame
 		gameOverText.setFont(font);
 		gameOverText.setCharacterSize(48);
 		gameOverText.setStyle(sf::Text::Bold);
-		gameOverText.setFillColor(sf::Color::Red);
-		gameOverText.setString("GAME OVER");
+		if (isGameLost == true)
+		{
+			gameOverText.setFillColor(sf::Color::Red);
+			gameOverText.setString("GAME OVER");
+		}
+		else 
+		{
+			gameOverText.setFillColor(sf::Color::Green);
+			gameOverText.setString("YOU WIN");
+		}
+		
 		
 		recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
 

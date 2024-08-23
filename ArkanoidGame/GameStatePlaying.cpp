@@ -23,12 +23,18 @@ namespace ArkanoidGame
 		// Init GameObjects
 		gameObjects.emplace_back(std::make_shared<Platform>());
 		gameObjects.emplace_back(std::make_shared<Ball>());
+		for (int i = 0; i < NUM_OF_BRICKS; ++i)
+		{
+			gameObjects.emplace_back(std::make_shared<Brick>());
+			Brick* brick = (Brick*)gameObjects.back().get();
+			brick->SetPosition({ (i + .5f) * BRICK_WIDTH, 100.f });
+		}
+
 		for (auto&& object : gameObjects)
 		{
 			object->Init();
 		}
-
-
+	
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
 		scoreText.setFillColor(sf::Color::Yellow);
@@ -69,11 +75,29 @@ namespace ArkanoidGame
 			ball->BounceOfPlatform();
 		}
 
+		for (int i = 2; i < gameObjects.size(); ++i) {
+			Brick* brick = (Brick*)gameObjects[i].get();
+			if (DoShapesCollide(brick->GetBrickCollider(), ball->GetBallCollider()))
+			{
+				ball->BounceOfBrick(brick->GetBrickCollider(), ball->GetBallCollider());
+				gameObjects.erase(gameObjects.begin() + i); // Destroy this brick
+			}
+		}
+		
+		
+		if (gameObjects.size() <= 2)
+		{
+			Game& game = Application::Instance().GetGame();
+			game.PushState(GameStateType::GameOver, false);
+			gameOverSound.play();
+			isGameLost = false;
+		}
 		if (ball->IsGameLost())
 		{
 			Game& game = Application::Instance().GetGame();
 			game.PushState(GameStateType::GameOver, false);
 			gameOverSound.play();
+			isGameLost = true;
 		}
 	}
 

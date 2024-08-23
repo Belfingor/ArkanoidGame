@@ -52,5 +52,6 @@ namespace ArkanoidGame
 		GameStateType type = GameStateType::None;
 		std::unique_ptr<GameStateData> data = nullptr;
 		bool isExclusivelyVisible = false;
+		
 	};
 }

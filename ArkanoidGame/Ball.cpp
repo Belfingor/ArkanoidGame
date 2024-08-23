@@ -3,9 +3,6 @@
 
 namespace ArkanoidGame
 {
-
-
-
 	void ArkanoidGame::Ball::Init()
 	{
 		assert(texture.loadFromFile(RESOURCES_PATH + "Textures/" + "Ball.png"));
@@ -21,11 +18,6 @@ namespace ArkanoidGame
 		sprite.setPosition(ballPosition.x, ballPosition.y);
 		Ball::BounceOfTheWall();
 	}
-
-	//void Ball::Draw(sf::RenderWindow& window)
-	//{
-	//	window.draw(ballSprite);
-	//}
 
 	Circle Ball::GetBallCollider()
 	{
@@ -47,6 +39,26 @@ namespace ArkanoidGame
 		{
 			ballVelocityModifierY *= -1;
 		}
+	}
+
+	void Ball::BounceOfBrick(const Rectangle& brickCollider, const Circle& ballCollider)
+	{
+		 // Calculate the normal vector to the brick
+		float brickNormalX = (ballCollider.center.x - brickCollider.center.x);
+		float brickNormalY = (ballCollider.center.y - brickCollider.center.y);
+
+		// If the ball collided with the left or right of the brick, reverse the x velocity
+		if (brickNormalX + ballCollider.radius> BRICK_WIDTH / 2 || brickNormalX - ballCollider.radius < -BRICK_WIDTH / 2)
+		{
+			ballVelocityModifierX *= -1;
+		}
+
+		// Same for y velocity
+		if (brickNormalY + ballCollider.radius > BRICK_HEIGHT / 2 || brickNormalY - ballCollider.radius < -BRICK_HEIGHT / 2)
+		{
+			ballVelocityModifierY *= -1;
+		}
+	
 	}
 
 	bool Ball::IsGameLost()

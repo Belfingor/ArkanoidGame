@@ -16,9 +16,12 @@ namespace ArkanoidGame
 	const int MAX_APPLES = 80;
 
 	const float PlATFORM_SIZE = 1.f;
-	const float PLATFORM_SPEED = 400.f;
+	const float PLATFORM_SPEED = 600.f;
 	const float BALL_SIZE = 20.f;
 	const float BALL_SPEED = 200.f;
+	const float BRICK_WIDTH = 80.f;
+	const float BRICK_HEIGHT = 32.f;
+	const int NUM_OF_BRICKS = 10;
 
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some CPP

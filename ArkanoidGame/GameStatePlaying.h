@@ -3,6 +3,7 @@
 #include "SFML/Audio.hpp"
 #include "Platform.h"
 #include "Ball.h"
+#include "Brick.h"
 #include <vector>
 #include "GameStateData.h"
 
