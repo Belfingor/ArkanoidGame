@@ -5,28 +5,29 @@
 #include "Sprite.h"
 #include "Math.h"
 #include "GameObject.h"
-
+#include "Collidable.h"
+#include "randomizer.h"
 
 namespace ArkanoidGame
 {
-	class Ball : public GameObject
+	class Ball final : public GameObject, public Collidable
 	{
 	public:
-		void Init() override;
-		void Update(float timeDelta)override;
-		Circle GetBallCollider();
-		void BounceOfPlatform();
-		void BounceOfTheWall();
-		void BounceOfBrick(const Rectangle& brickCollider, const Circle& ballCollider);
-
-
+		Ball(const sf::Vector2f& position);
+		~Ball() = default;
+		void Update(float timeDelta) override;
+		//--------------------------------------------------------------------------------
+		void InvertDirectionX();
+		void InvertDirectionY();
+		//--------------------------------------------------------------------------------
+		bool GetCollision(std::shared_ptr<Collidable> collidable) const override;
+		void ChangeAngle(float angle);
 		bool IsGameLost();
 
-
 	private:
-		sf::Vector2f ballPosition;
-		int ballVelocityModifierX = 1;
-		int ballVelocityModifierY = 1;
+		void OnHit();
+		sf::Vector2f direction;
+		float lastAngle = 90.f;
 	};
 
 }

@@ -5,21 +5,27 @@
 #include "Sprite.h"
 #include "Math.h"
 #include "GameObject.h"
+#include "Collidable.h"
+#include "Ball.h"
 
 namespace ArkanoidGame
 {
 
-	class Platform : public GameObject 
+	class Platform final : public GameObject, public Collidable
 	{
 	public:
-		void Init() override;
+		Platform(const sf::Vector2f& position);
+		~Platform() = default;
 		void Update(float timeDelta) override;
-		void MovePlatform(float timeDelta);
-		Rectangle GetPlatformCollider();
+		bool GetCollision(std::shared_ptr<Collidable> collidable)const override;
+		void OnHit() override
+		{
+			// Nothing to change here regarding the platform
+		}
+		bool CheckCollision(std::shared_ptr<Collidable> collidable) override;
 
 	private:
-		sf::Vector2f platformPosition{ SCREEN_WIDTH / 2.f - platformWidth / 2.f, SCREEN_HEIGHT - platformHeight / 2 };
-		float platformHeight = PlATFORM_SIZE * 24.f;
-		float platformWidth = PlATFORM_SIZE * 64.f;
+
+		void MovePlatform(float speed);
  	};
 }

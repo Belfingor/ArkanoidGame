@@ -1,37 +1,71 @@
 #include "Platform.h"
+#include <algorithm>
+
+namespace
+{
+	const std::string TEXTURE_PATH = "Textures/Platform_A.png";
+}
 
 namespace ArkanoidGame
 {
-	void Platform::Init()
+	Platform::Platform(const sf::Vector2f& position) : GameObject(RESOURCES_PATH + TEXTURE_PATH, position, PLATFORM_WIDTH, PlATFORM_HEIGHT)
 	{
-		platformPosition.x = SCREEN_WIDTH / 2.f;
-		platformPosition.y = SCREEN_HEIGHT - platformHeight / 2.f;
-		assert(texture.loadFromFile(RESOURCES_PATH + "Textures/" + "Platform_A.png"));
-		InitSprite(sprite, platformWidth, platformHeight, texture);
-		sprite.setPosition(platformPosition.x, platformPosition.y);
+		// Initiating evetyrhing what's needed in GameObject constructor
 	}
 
-	void Platform::MovePlatform(float timeDelta)
+	bool Platform::CheckCollision(std::shared_ptr<Collidable> collidable)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && platformPosition.x > platformWidth / 2)
+		auto ball = std::static_pointer_cast<Ball>(collidable);
+		if (!ball) return false;
+
+		if (GetCollision(ball))
 		{
-			platformPosition.x -= PLATFORM_SPEED * timeDelta;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && platformPosition.x <SCREEN_WIDTH - platformWidth / 2)
-		{
-			platformPosition.x += PLATFORM_SPEED * timeDelta;
+			auto rect = GetRect();
+			auto ballPosOnPlatform = (ball->GetPosition().x - (rect.left + rect.width / 2.f)) / (rect.width / 2);
+			ball->ChangeAngle(90 - 20 * ballPosOnPlatform);
+			return true;
 		}
 	}
 
-	Rectangle Platform::GetPlatformCollider()
+	void Platform::MovePlatform(float speed)
 	{
-		return { { platformPosition.x - platformWidth / 2.f, platformPosition.y - platformHeight / 2.f },{ platformWidth, platformHeight } };
+		auto position = sprite.getPosition();
+		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2, SCREEN_WIDTH - PlATFORM_HEIGHT / 2.f);
+		sprite.setPosition(position);
 	}
 
 	void Platform::Update(float timeDelta)
 	{
-		MovePlatform(timeDelta);
-		sprite.setPosition(platformPosition.x, platformPosition.y);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			MovePlatform(-timeDelta * PLATFORM_SPEED);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			MovePlatform(timeDelta * PLATFORM_SPEED);
+		}
+	}
+
+	bool Platform::GetCollision(std::shared_ptr<Collidable> collidable) const
+	{
+		auto ball = std::static_pointer_cast<Ball>(collidable);
+		if (!ball) return false;
+
+		auto sqr = [](float x)
+			{
+				return x * x;
+			};
+		const auto rect = sprite.getGlobalBounds();
+		const auto ballPos = ball->GetPosition();
+		if (ballPos.x < rect.left)
+		{
+			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.f);
+		}
+		if (ballPos.x > rect.left + rect.width)
+		{
+			return sqr(ballPos.x - rect.left - rect.width) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.f);
+		}
+		return std::fabs(ballPos.y - rect.top) <= BALL_SIZE / 2.f;
 	}
 
 }

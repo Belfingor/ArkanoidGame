@@ -112,5 +112,11 @@
     <ClInclude Include="Brick.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="Collidable.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="randomizer.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

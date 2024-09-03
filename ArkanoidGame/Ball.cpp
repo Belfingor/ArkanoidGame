@@ -1,69 +1,70 @@
 #include "Ball.h"
 
 
+namespace
+{
+	const std::string TEXTURE_PATH = "Textures/Ball.png";
+}
+
 namespace ArkanoidGame
 {
-	void ArkanoidGame::Ball::Init()
+	Ball::Ball(const sf::Vector2f& position) : GameObject(RESOURCES_PATH + TEXTURE_PATH, position, BALL_SIZE, BALL_SIZE)
 	{
-		assert(texture.loadFromFile(RESOURCES_PATH + "Textures/" + "Ball.png"));
-		InitSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
-		ballPosition = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-		sprite.setPosition(ballPosition.x, ballPosition.y);
+		const float angle = 90;
+		const auto pi = std::acos(-1.f);
+		direction.x = std::cos(pi / 180.f * angle);
+		direction.y = std::sin(pi / 180.f * angle);
 	}
 
 	void Ball::Update(float timeDelta)
 	{
-		ballPosition = { (ballPosition.x + BALL_SPEED * ballVelocityModifierX * timeDelta) ,
-						 (ballPosition.y + BALL_SPEED * ballVelocityModifierY * timeDelta) };
-		sprite.setPosition(ballPosition.x, ballPosition.y);
-		Ball::BounceOfTheWall();
-	}
-
-	Circle Ball::GetBallCollider()
-	{
-		return{ { ballPosition.x, ballPosition.y }, BALL_SIZE / 2 };
-	}
-
-	void Ball::BounceOfPlatform()
-	{
-		ballVelocityModifierY *= -1;
-	}
-
-	void Ball::BounceOfTheWall()
-	{
-		if (ballPosition.x > SCREEN_WIDTH - BALL_SIZE / 2 || ballPosition.x < BALL_SIZE / 2)
+		const auto pos = sprite.getPosition() + BALL_SPEED * timeDelta * direction;
+		sprite.setPosition(pos);
+ 
+		if (pos.x - BALL_SIZE / 2.f <= 0 || pos.x + BALL_SIZE / 2.f >= SCREEN_WIDTH)
 		{
-			ballVelocityModifierX *= -1;
+			direction.x *= -1;
 		}
-		if (ballPosition.y < BALL_SIZE / 2)
+		if (pos.y - BALL_SIZE / 2.f <= 0 || pos.y + BALL_SIZE / 2.f >= SCREEN_HEIGHT)
 		{
-			ballVelocityModifierY *= -1;
+			direction.y *= -1;
 		}
 	}
 
-	void Ball::BounceOfBrick(const Rectangle& brickCollider, const Circle& ballCollider)
+	void Ball::InvertDirectionX()
 	{
-		 // Calculate the normal vector to the brick
-		float brickNormalX = (ballCollider.center.x - brickCollider.center.x);
-		float brickNormalY = (ballCollider.center.y - brickCollider.center.y);
+		direction.x *= -1;
+	}
 
-		// If the ball collided with the left or right of the brick, reverse the x velocity
-		if (brickNormalX + ballCollider.radius> BRICK_WIDTH / 2 || brickNormalX - ballCollider.radius < -BRICK_WIDTH / 2)
-		{
-			ballVelocityModifierX *= -1;
-		}
+	void Ball::InvertDirectionY()
+	{
+		direction.y *= -1;
+	}
 
-		// Same for y velocity
-		if (brickNormalY + ballCollider.radius > BRICK_HEIGHT / 2 || brickNormalY - ballCollider.radius < -BRICK_HEIGHT / 2)
-		{
-			ballVelocityModifierY *= -1;
-		}
-	
+	bool Ball::GetCollision(std::shared_ptr<Collidable> collidable) const
+	{
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidable);
+		assert(gameObject);
+		return GetRect().intersects(gameObject->GetRect());
+	}
+
+	void Ball::ChangeAngle(float angle)
+	{
+		lastAngle = angle;
+		const auto pi = std::acos(-1.f);
+		direction.x = (angle / abs(angle)) * std::cos(pi / 180.f * angle);
+		direction.y = -1 * abs(std::sin(pi / 180.f * angle));
 	}
 
 	bool Ball::IsGameLost()
 	{
-		return ballPosition.y > SCREEN_HEIGHT;
+		return direction.y > SCREEN_HEIGHT;
+	}
+
+	void Ball::OnHit()
+	{
+		lastAngle += random<float>(-5, 5);
+		ChangeAngle(lastAngle);
 	}
 
 }

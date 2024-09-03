@@ -1,23 +1,45 @@
 #include "Brick.h"
 
+namespace
+{
+	const std::string TEXTURE_PATH = "Textures/Standard_Brick.png";
+}
+
 namespace ArkanoidGame
 {
-	void Brick::Init()
+	void Brick::OnHit()
 	{
-		assert(texture.loadFromFile(RESOURCES_PATH + "Textures/" + "Standard_Brick.png"));
-		InitSprite(sprite, BRICK_WIDTH, BRICK_HEIGHT, texture);
-		sprite.setPosition(brickPosition.x, brickPosition.y);
+		hitCount -= 1;
+	}
+	Brick::Brick(const sf::Vector2f& position) : GameObject(RESOURCES_PATH + TEXTURE_PATH, position, BRICK_WIDTH, BRICK_HEIGHT)
+	{
+	}
+	Brick::~Brick()
+	{
+
+	}
+	bool Brick::GetCollision(std::shared_ptr<Collidable> collidable) const
+	{
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidable);
+		assert(gameObject);
+		sf::Rect rect = gameObject->GetRect();
+		rect.width *= 1.1;
+		return GetRect().intersects(gameObject->GetRect());
 	}
 	void Brick::Update(float timeDelta)
 	{
 
 	}
-	Rectangle Brick::GetBrickCollider()
+	bool Brick::IsBroken()
+	{
+		return hitCount <= 0;
+	}
+	/*Rectangle Brick::GetBrickCollider()
 	{
 		return { { brickPosition.x - BRICK_WIDTH / 2.f, brickPosition.y - BRICK_HEIGHT / 2.f },{ BRICK_WIDTH, BRICK_HEIGHT } };
 	}
 	void Brick::SetPosition(sf::Vector2f position)
 	{
 		brickPosition = position;
-	}
+	}*/
 }
