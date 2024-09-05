@@ -112,10 +112,13 @@
     <ClInclude Include="Brick.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Collidable.h">
+    <ClInclude Include="iCollidable.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="randomizer.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="iDelayedAction.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

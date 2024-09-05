@@ -183,10 +183,11 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Brick.h" />
-    <ClInclude Include="Collidable.h" />
+    <ClInclude Include="iCollidable.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateData.h" />
+    <ClInclude Include="iDelayedAction.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="randomizer.h" />

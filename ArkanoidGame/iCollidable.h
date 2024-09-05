@@ -5,13 +5,13 @@
 namespace ArkanoidGame
 {
 	// Collision interface
-	class Collidable
+	class iCollidable
 	{
 	protected:
 		virtual void OnHit() = 0;
 	public:
-		virtual bool GetCollision(std::shared_ptr<Collidable> collidable) const = 0;
-		virtual bool CheckCollision(std::shared_ptr<Collidable> collidable)
+		virtual bool GetCollision(std::shared_ptr<iCollidable> collidable) const = 0;
+		virtual bool CheckCollision(std::shared_ptr<iCollidable> collidable)
 		{
 			if (GetCollision(collidable))
 			{

@@ -5,28 +5,46 @@
 #include "Sprite.h"
 #include "Math.h"
 #include "GameObject.h"
-#include "Collidable.h"
+#include "iCollidable.h"
+#include "iDelayedAction.h"
 
 namespace ArkanoidGame
 {
-	class Brick : public GameObject, public Collidable
+	class Brick : public GameObject, public iCollidable
 	{
 	protected:
 		void OnHit() override;
 		int hitCount = 1;
 	public:
-		Brick (const sf::Vector2f& position);
+		Brick (const sf::Vector2f& position, const sf::Color& color = sf::Color::White);
 		virtual ~Brick();
-		bool GetCollision(std::shared_ptr<Collidable> collidable) const override;
+		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
 
 		void Update(float timeDelta) override;
 		bool IsBroken();
+	};
 
+	class SmoothDestroyBrick : public Brick, public iDelayedAction
+	{
+	protected:
+		void OnHit() override;
+		sf::Color color;
 
+	public:
+		SmoothDestroyBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::Green);
+		~SmoothDestroyBrick() = default;
 
-		//Rectangle GetBrickCollider();
-		//void SetPosition(sf::Vector2f position);
-	/*private:
-		sf::Vector2f brickPosition;*/
+		void Update(float timeDelta) override;
+		bool GetCollision(std::shared_ptr<iCollidable> collidableObject) const;
+		void FinalAction() override;
+		void EachTickAction(float deltaTime) override;
+	};
+
+	class UnbreackableBrick : public Brick
+	{
+	public:
+		UnbreackableBrick(const sf::Vector2f& position);
+		void OnHit() override;
+		void Update(float deltaTime) override;
 	};
 }

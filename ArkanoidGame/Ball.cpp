@@ -41,7 +41,7 @@ namespace ArkanoidGame
 		direction.y *= -1;
 	}
 
-	bool Ball::GetCollision(std::shared_ptr<Collidable> collidable) const
+	bool Ball::GetCollision(std::shared_ptr<iCollidable> collidable) const
 	{
 		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidable);
 		assert(gameObject);

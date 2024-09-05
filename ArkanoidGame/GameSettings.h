@@ -25,8 +25,9 @@ namespace ArkanoidGame
 	//----------------------------------------------
 	const float BRICK_WIDTH = 80.f;
 	const float BRICK_HEIGHT = 32.f;
-	const int NUM_OF_BRICKS_PER_ROW = 3;
-	const int NUM_OF_BRICKS_PER_COLUMN = 10;
+	const int NUM_OF_BRICKS_PER_COLLUMN = 4;
+	const int NUM_OF_BRICKS_PER_ROW = 10;
+	const float BRICK_BREAK_DELAY = 1.f;
 	//--------------------------------------------------------------------------------
 
 	const int MAX_RECORDS_TABLE_SIZE = 5;

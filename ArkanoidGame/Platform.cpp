@@ -13,7 +13,7 @@ namespace ArkanoidGame
 		// Initiating evetyrhing what's needed in GameObject constructor
 	}
 
-	bool Platform::CheckCollision(std::shared_ptr<Collidable> collidable)
+	bool Platform::CheckCollision(std::shared_ptr<iCollidable> collidable)
 	{
 		auto ball = std::static_pointer_cast<Ball>(collidable);
 		if (!ball) return false;
@@ -46,7 +46,7 @@ namespace ArkanoidGame
 		}
 	}
 
-	bool Platform::GetCollision(std::shared_ptr<Collidable> collidable) const
+	bool Platform::GetCollision(std::shared_ptr<iCollidable> collidable) const
 	{
 		auto ball = std::static_pointer_cast<Ball>(collidable);
 		if (!ball) return false;

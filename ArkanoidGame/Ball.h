@@ -5,12 +5,12 @@
 #include "Sprite.h"
 #include "Math.h"
 #include "GameObject.h"
-#include "Collidable.h"
+#include "iCollidable.h"
 #include "randomizer.h"
 
 namespace ArkanoidGame
 {
-	class Ball final : public GameObject, public Collidable
+	class Ball final : public GameObject, public iCollidable
 	{
 	public:
 		Ball(const sf::Vector2f& position);
@@ -20,7 +20,7 @@ namespace ArkanoidGame
 		void InvertDirectionX();
 		void InvertDirectionY();
 		//--------------------------------------------------------------------------------
-		bool GetCollision(std::shared_ptr<Collidable> collidable) const override;
+		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
 		void ChangeAngle(float angle);
 		bool IsGameLost();
 

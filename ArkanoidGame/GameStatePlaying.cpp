@@ -124,14 +124,20 @@ namespace ArkanoidGame
 	}
 	void GameStatePlayingData::CreateBricks()
 	{
-
-		for (int rows = 0; rows < NUM_OF_BRICKS_PER_ROW; ++rows)
+		int collumn = 0;
+		for (; collumn < NUM_OF_BRICKS_PER_COLLUMN; ++collumn)
 		{
-			for (int collumns = 0; collumns < NUM_OF_BRICKS_PER_COLUMN; ++collumns)
+			for (int row = 0; row < NUM_OF_BRICKS_PER_ROW; ++row)
 			{
-				bricks.emplace_back(std::make_shared<Brick>(sf::Vector2f({ BRICK_WIDTH / 2.f + collumns * BRICK_WIDTH, 100.f + rows * BRICK_HEIGHT })));
+				bricks.emplace_back(std::make_shared<SmoothDestroyBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
 			}
+			
 		}
+		for (int row = 0; row < 3; ++row)
+		{
+			bricks.emplace_back(std::make_shared<UnbreackableBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+		}
+		
 
 	}
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY)
