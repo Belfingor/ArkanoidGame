@@ -15,15 +15,15 @@ namespace ArkanoidGame
 	protected:
 		void OnHit() override;
 		int hitCount = 1;
+		
 	public:
 		Brick (const sf::Vector2f& position, const sf::Color& color = sf::Color::White);
 		virtual ~Brick();
 		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
-
 		void Update(float timeDelta) override;
 		bool IsBroken();
 	};
-
+	//--------------------------------------------------------------------------------
 	class SmoothDestroyBrick : public Brick, public iDelayedAction
 	{
 	protected:
@@ -39,12 +39,32 @@ namespace ArkanoidGame
 		void FinalAction() override;
 		void EachTickAction(float deltaTime) override;
 	};
-
+	//--------------------------------------------------------------------------------
 	class UnbreackableBrick : public Brick
 	{
 	public:
 		UnbreackableBrick(const sf::Vector2f& position);
+		~UnbreackableBrick() = default;
 		void OnHit() override;
 		void Update(float deltaTime) override;
+	};
+	//--------------------------------------------------------------------------------
+	class MultiHitBrick : public Brick
+	{
+	protected:
+		sf::Color color;
+	public:
+		MultiHitBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::White);
+		~MultiHitBrick() = default;
+
+		void OnHit() override;
+		void Update(float deltaTime) override;
+	};
+	//--------------------------------------------------------------------------------
+	class GlassBrick : public Brick
+	{
+	public:
+		GlassBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::Blue);
+		~GlassBrick() = default;
 	};
 }

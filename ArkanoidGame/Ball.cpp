@@ -66,5 +66,4 @@ namespace ArkanoidGame
 		lastAngle += random<float>(-5, 5);
 		ChangeAngle(lastAngle);
 	}
-
 }

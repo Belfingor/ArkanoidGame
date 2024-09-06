@@ -35,12 +35,11 @@ namespace ArkanoidGame
 	{
 		return hitCount <= 0;
 	}
+	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
 	void SmoothDestroyBrick::OnHit()
 	{
 		StartTimer(BRICK_BREAK_DELAY);
 	}
-
-	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
 	SmoothDestroyBrick::SmoothDestroyBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color) 
 	{
 
@@ -64,7 +63,7 @@ namespace ArkanoidGame
 	}
 	void SmoothDestroyBrick::FinalAction()
 	{
-		--hitCount;
+		hitCount -=1;
 	}
 	void SmoothDestroyBrick::EachTickAction(float deltaTime)
 	{
@@ -83,6 +82,37 @@ namespace ArkanoidGame
 	void UnbreackableBrick::Update(float deltaTime)
 	{
 		// Do nothing
+	}
+
+	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
+	MultiHitBrick::MultiHitBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color)
+	{
+		hitCount = MULTIHIT_BRICK_HITPOINTS;
+	}
+	void MultiHitBrick::OnHit()
+	{
+		--hitCount;
+	}
+	void MultiHitBrick::Update(float deltaTime)
+	{
+		switch (hitCount)
+		{
+		case 2:
+			//set FullHP texture
+			Brick::texture.loadFromFile(RESOURCES_PATH + "Textures/Standard_Brick.png");
+			break;
+		case 1:
+			//set CrackedTexture
+			Brick::texture.loadFromFile(RESOURCES_PATH + "Textures/Damaged_Brick.png");
+			break;
+		default:
+			break;
+		}
+	}
+	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
+	GlassBrick::GlassBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color)
+	{
+
 	}
 }
 	

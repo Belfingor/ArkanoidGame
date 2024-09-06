@@ -66,20 +66,24 @@ namespace ArkanoidGame
 		bool needInverseDirX = false;
 		bool needInverseDirY = false;
 
-
-		bool hasBrokeOneBlock = false;
+		bool hasBrokeOneBrick = false;
 		//remove-erase idiom
 		bricks.erase(
 			std::remove_if(bricks.begin(), bricks.end(),
-				[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block) {
-					if ((!hasBrokeOneBlock) && block->CheckCollision(ball)) {
-						hasBrokeOneBlock = true;
-						const auto ballPos = ball->GetPosition();
-						const auto blockRect = block->GetRect();
+				[ball, &hasBrokeOneBrick, &needInverseDirX, &needInverseDirY, this](auto brick) {
+					if ((!hasBrokeOneBrick) && brick->CheckCollision(ball))
+					{
+						auto glassBrick = dynamic_cast<GlassBrick*>(brick.get());
+						if (!glassBrick)
+						{
+							hasBrokeOneBrick = true;
+							const auto ballPos = ball->GetPosition();
+							const auto brickRect = brick->GetRect();
 
-						GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+							GetBallInverse(ballPos, brickRect, needInverseDirX, needInverseDirY);
+						}
 					}
-					return block->IsBroken();
+					return brick->IsBroken();
 				}),
 			bricks.end()
 		);
@@ -90,7 +94,7 @@ namespace ArkanoidGame
 			ball->InvertDirectionY();
 		}
 
-		const bool isGameWin = bricks.size() == 0;
+		const bool isGameWin = bricks.size() == NUM_OF_UBREAKABLE_BRICKS;
 		const bool isGameOver = !isCollision && ball->GetPosition().y > platform->GetRect().top;
 		Game& game = Application::Instance().GetGame();
 
@@ -133,9 +137,17 @@ namespace ArkanoidGame
 			}
 			
 		}
-		for (int row = 0; row < 3; ++row)
+		for (int row = 0; row < NUM_OF_UBREAKABLE_BRICKS; ++row)
 		{
 			bricks.emplace_back(std::make_shared<UnbreackableBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+		}
+		for (int row = 3; row < 5; ++row)
+		{
+			bricks.emplace_back(std::make_shared<MultiHitBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+		}
+		for (int row = 5; row < 10; ++row)
+		{
+			bricks.emplace_back(std::make_shared<GlassBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
 		}
 		
 
