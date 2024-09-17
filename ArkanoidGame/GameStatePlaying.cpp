@@ -12,17 +12,17 @@ namespace ArkanoidGame
 	void GameStatePlayingData::Init()
 	{	
 		// Init game resources (terminate if error)
-		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
-		assert(gameOverSoundBuffer.loadFromFile(SOUNDS_PATH + "Death.wav"));
+		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
+		assert(gameOverSoundBuffer.loadFromFile(SETTINGS.SOUNDS_PATH + "Death.wav"));
 
 		// Init background
-		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
+		background.setSize(sf::Vector2f(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
 		background.setFillColor(sf::Color::Blue);
 
 		// Init GameObjects
-		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PlATFORM_HEIGHT/ 2.f })));
-		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PlATFORM_HEIGHT - BALL_SIZE / 2.f })));
+		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT/ 2.f })));
+		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f })));
 		CreateBricks();
 	
 		scoreText.setFont(font);
@@ -94,7 +94,7 @@ namespace ArkanoidGame
 			ball->InvertDirectionY();
 		}
 
-		const bool isGameWin = bricks.size() == NUM_OF_UBREAKABLE_BRICKS;
+		const bool isGameWin = bricks.size() == SETTINGS.NUM_OF_UBREAKABLE_BRICKS;
 		const bool isGameOver = !isCollision && ball->GetPosition().y > platform->GetRect().top;
 		Game& game = Application::Instance().GetGame();
 
@@ -129,25 +129,25 @@ namespace ArkanoidGame
 	void GameStatePlayingData::CreateBricks()
 	{
 		int collumn = 0;
-		for (; collumn < NUM_OF_BRICKS_PER_COLLUMN; ++collumn)
+		for (; collumn < SETTINGS.NUM_OF_BRICKS_PER_COLLUMN; ++collumn)
 		{
-			for (int row = 0; row < NUM_OF_BRICKS_PER_ROW; ++row)
+			for (int row = 0; row < SETTINGS.NUM_OF_BRICKS_PER_ROW; ++row)
 			{
-				bricks.emplace_back(std::make_shared<SmoothDestroyBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+				bricks.emplace_back(std::make_shared<SmoothDestroyBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
 			}
 			
 		}
-		for (int row = 0; row < NUM_OF_UBREAKABLE_BRICKS; ++row)
+		for (int row = 0; row < SETTINGS.NUM_OF_UBREAKABLE_BRICKS; ++row)
 		{
-			bricks.emplace_back(std::make_shared<UnbreackableBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+			bricks.emplace_back(std::make_shared<UnbreackableBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
 		}
 		for (int row = 3; row < 5; ++row)
 		{
-			bricks.emplace_back(std::make_shared<MultiHitBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+			bricks.emplace_back(std::make_shared<MultiHitBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
 		}
 		for (int row = 5; row < 10; ++row)
 		{
-			bricks.emplace_back(std::make_shared<GlassBrick>(sf::Vector2f({ BRICK_WIDTH / 2.f + row * BRICK_WIDTH, 100.f + collumn * BRICK_HEIGHT })));
+			bricks.emplace_back(std::make_shared<GlassBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
 		}
 		
 

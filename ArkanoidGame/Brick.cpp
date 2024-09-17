@@ -11,7 +11,7 @@ namespace ArkanoidGame
 	{
 		hitCount -= 1;
 	}
-	Brick::Brick(const sf::Vector2f& position, const sf::Color& color) : GameObject(RESOURCES_PATH + TEXTURE_PATH, position, BRICK_WIDTH, BRICK_HEIGHT)
+	Brick::Brick(const sf::Vector2f& position, const sf::Color& color) : GameObject(SETTINGS.RESOURCES_PATH + TEXTURE_PATH, position, SETTINGS.BRICK_WIDTH, SETTINGS.BRICK_HEIGHT)
 	{
 		sprite.setColor(color);
 	}
@@ -38,7 +38,7 @@ namespace ArkanoidGame
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
 	void SmoothDestroyBrick::OnHit()
 	{
-		StartTimer(BRICK_BREAK_DELAY);
+		StartTimer(SETTINGS.BRICK_BREAK_DELAY);
 	}
 	SmoothDestroyBrick::SmoothDestroyBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color) 
 	{
@@ -87,7 +87,7 @@ namespace ArkanoidGame
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
 	MultiHitBrick::MultiHitBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color)
 	{
-		hitCount = MULTIHIT_BRICK_HITPOINTS;
+		hitCount = SETTINGS.MULTIHIT_BRICK_HITPOINTS;
 	}
 	void MultiHitBrick::OnHit()
 	{
@@ -99,11 +99,11 @@ namespace ArkanoidGame
 		{
 		case 2:
 			//set FullHP texture
-			Brick::texture.loadFromFile(RESOURCES_PATH + "Textures/Standard_Brick.png");
+			Brick::texture.loadFromFile(SETTINGS.RESOURCES_PATH + "Textures/Standard_Brick.png");
 			break;
 		case 1:
 			//set CrackedTexture
-			Brick::texture.loadFromFile(RESOURCES_PATH + "Textures/Damaged_Brick.png");
+			Brick::texture.loadFromFile(SETTINGS.RESOURCES_PATH + "Textures/Damaged_Brick.png");
 			break;
 		default:
 			break;

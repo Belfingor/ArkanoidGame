@@ -11,7 +11,7 @@ namespace ArkanoidGame
 
 	void GameStateGameOverData::Init()
 	{
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		assert(font.loadFromFile(SETTINGS.RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
 
 		timeSinceGameOver = 0.f;
 
@@ -34,7 +34,7 @@ namespace ArkanoidGame
 		}
 		
 		
-		recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
+		recordsTableTexts.reserve(SETTINGS.MAX_RECORDS_TABLE_SIZE);
 
 		std::multimap<int, std::string> sortedRecordsTable;
 		Game& game = Application::Instance().GetGame();
@@ -45,7 +45,7 @@ namespace ArkanoidGame
 
 		bool isSnakeInTable = false;
 		auto it = sortedRecordsTable.rbegin();
-		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it) // Note, we can do several actions in for action block
+		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it) // Note, we can do several actions in for action block
 		{
 			recordsTableTexts.emplace_back(); // Create text in place
 			sf::Text& text = recordsTableTexts.back();
@@ -73,7 +73,7 @@ namespace ArkanoidGame
 			sf::Text& text = recordsTableTexts.back();
 			std::stringstream sstream;
 			int snakeScores = game.GetRecordByPlayerId(PLAYER_NAME);
-			sstream << MAX_RECORDS_TABLE_SIZE << ". " << PLAYER_NAME << ": " << snakeScores;
+			sstream << SETTINGS.MAX_RECORDS_TABLE_SIZE << ". " << PLAYER_NAME << ": " << snakeScores;
 			text.setString(sstream.str());
 			text.setFillColor(sf::Color::Green);
 		}

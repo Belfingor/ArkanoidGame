@@ -8,7 +8,7 @@ namespace
 
 namespace ArkanoidGame
 {
-	Platform::Platform(const sf::Vector2f& position) : GameObject(RESOURCES_PATH + TEXTURE_PATH, position, PLATFORM_WIDTH, PlATFORM_HEIGHT)
+	Platform::Platform(const sf::Vector2f& position) : GameObject(SETTINGS.RESOURCES_PATH + TEXTURE_PATH, position, SETTINGS.PLATFORM_WIDTH, SETTINGS.PlATFORM_HEIGHT)
 	{
 		// Initiating evetyrhing what's needed in GameObject constructor
 	}
@@ -30,7 +30,7 @@ namespace ArkanoidGame
 	void Platform::MovePlatform(float speed)
 	{
 		auto position = sprite.getPosition();
-		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2, SCREEN_WIDTH - PlATFORM_HEIGHT / 2.f);
+		position.x = std::clamp(position.x + speed, SETTINGS.PLATFORM_WIDTH / 2, SETTINGS.SCREEN_WIDTH - SETTINGS.PlATFORM_HEIGHT / 2.f);
 		sprite.setPosition(position);
 	}
 
@@ -38,11 +38,11 @@ namespace ArkanoidGame
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			MovePlatform(-timeDelta * PLATFORM_SPEED);
+			MovePlatform(-timeDelta * SETTINGS.PLATFORM_SPEED);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			MovePlatform(timeDelta * PLATFORM_SPEED);
+			MovePlatform(timeDelta * SETTINGS.PLATFORM_SPEED);
 		}
 	}
 
@@ -59,13 +59,13 @@ namespace ArkanoidGame
 		const auto ballPos = ball->GetPosition();
 		if (ballPos.x < rect.left)
 		{
-			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.f);
+			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(SETTINGS.BALL_SIZE / 2.f);
 		}
 		if (ballPos.x > rect.left + rect.width)
 		{
-			return sqr(ballPos.x - rect.left - rect.width) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.f);
+			return sqr(ballPos.x - rect.left - rect.width) + sqr(ballPos.y - rect.top) < sqr(SETTINGS.BALL_SIZE / 2.f);
 		}
-		return std::fabs(ballPos.y - rect.top) <= BALL_SIZE / 2.f;
+		return std::fabs(ballPos.y - rect.top) <= SETTINGS.BALL_SIZE / 2.f;
 	}
 
 }
