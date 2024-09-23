@@ -2,10 +2,11 @@
 #include "Application.h"
 #include "Game.h"
 #include "Text.h"
-#include <assert.h>
-#include <sstream>
 #include "Platform.h"
 #include "Math.h"
+
+#include <cassert>
+#include <sstream>
 
 namespace ArkanoidGame
 {
@@ -23,8 +24,15 @@ namespace ArkanoidGame
 		// Init GameObjects
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT/ 2.f })));
 		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f })));
+
+		//Init Brick Factories
+		brickFactories.emplace(BrickType::Simple, std::make_unique<SimpleBrickFactory>());
+		brickFactories.emplace(BrickType::MultiHit, std::make_unique<MultiHitBrickFactory>());
+		brickFactories.emplace(BrickType::Unbreackable, std::make_unique<UnbreackableBrickFactory>());
+		brickFactories.emplace(BrickType::Glass, std::make_unique<GlassBrickFactory>());
 		CreateBricks();
 	
+		//Init Texts
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
 		scoreText.setFillColor(sf::Color::Yellow);
@@ -94,13 +102,22 @@ namespace ArkanoidGame
 			ball->InvertDirectionY();
 		}
 
-		const bool isGameWin = bricks.size() == SETTINGS.NUM_OF_UBREAKABLE_BRICKS;
+		const bool isGameWin = bricks.size() <= unbreakableBricksCount;
 		const bool isGameOver = !isCollision && ball->GetPosition().y > platform->GetRect().top;
 		Game& game = Application::Instance().GetGame();
 
-		if (isGameWin) {					// Will create a gameStateType GameWon later to match the condition
-			gameOverSound.play();
-			game.PushState(GameStateType::GameOver, false);
+		if (isGameWin) {	
+			if (currentLevel >= levelLoader.GetLevelCount() - 1) 
+			{
+				gameOverSound.play();
+				game.PushState(GameStateType::GameOver, false); // Will create a gameStateType GameWon later to match the condition
+			}
+			else
+			{
+				bricks.clear();
+				++currentLevel;
+				CreateBricks();
+			}
 		}
 		else if (isGameOver) {
 			gameOverSound.play();
@@ -128,30 +145,36 @@ namespace ArkanoidGame
 	}
 	void GameStatePlayingData::CreateBricks()
 	{
-		int collumn = 0;
-		for (; collumn < SETTINGS.NUM_OF_BRICKS_PER_COLLUMN; ++collumn)
+		for (const auto& pair : brickFactories)
 		{
-			for (int row = 0; row < SETTINGS.NUM_OF_BRICKS_PER_ROW; ++row)
+			pair.second->ClearCounter();
+		}
+		auto& settings = SETTINGS;
+		auto level = levelLoader.GetLevel(currentLevel);
+
+		for (auto pairPosBrickType : level.m_bricks)
+		{
+			auto brickType = pairPosBrickType.second;
+			sf::Vector2i pos = pairPosBrickType.first;
+
+			sf::Vector2f position
 			{
-				bricks.emplace_back(std::make_shared<SmoothDestroyBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
-			}
+				(float)(settings.BRICK_WIDTH / 2.f + pos.x * (settings.BRICK_WIDTH)) ,
+				(float)pos.y * settings.BRICK_HEIGHT
+			};
+	
+			bricks.emplace_back(brickFactories.at(brickType)->CreateBrick(position));
 			
 		}
-		for (int row = 0; row < SETTINGS.NUM_OF_UBREAKABLE_BRICKS; ++row)
-		{
-			bricks.emplace_back(std::make_shared<UnbreackableBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
-		}
-		for (int row = 3; row < 5; ++row)
-		{
-			bricks.emplace_back(std::make_shared<MultiHitBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
-		}
-		for (int row = 5; row < 10; ++row)
-		{
-			bricks.emplace_back(std::make_shared<GlassBrick>(sf::Vector2f({ SETTINGS.BRICK_WIDTH / 2.f + row * SETTINGS.BRICK_WIDTH, 100.f + collumn * SETTINGS.BRICK_HEIGHT })));
-		}
 		
-
+		int breackableCount = 0;
+		for (const auto& pair : brickFactories)
+		{
+			breackableCount += pair.second->GetCreatedBreackableBricksCount();
+		}
+		unbreakableBricksCount = bricks.size() - breackableCount;
 	}
+
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY)
 	{
 		if (ballPos.y > brickRect.top + brickRect.height)

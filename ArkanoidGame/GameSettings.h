@@ -22,6 +22,7 @@ namespace ArkanoidGame
 		const std::string TEXTURES_PATH = RESOURCES_PATH + "Textures/";
 		const std::string FONTS_PATH = RESOURCES_PATH + "Fonts/";
 		const std::string SOUNDS_PATH = RESOURCES_PATH + "Sounds/";
+		const std::string LELEVS_CONFIG_PATH = RESOURCES_PATH + "levels.config";
 
 		// Game settings constants
 		const unsigned int SCREEN_WIDTH = 800;
@@ -40,7 +41,7 @@ namespace ArkanoidGame
 		const float BRICK_WIDTH = 80.f;
 		const float BRICK_HEIGHT = 32.f;
 		const int NUM_OF_BRICKS_PER_COLLUMN = 2;
-		const int NUM_OF_BRICKS_PER_ROW = 10;
+		const int NUM_OF_BRICKS_PER_ROW = 15;
 		const float BRICK_BREAK_DELAY = 1.f;
 		const int MULTIHIT_BRICK_HITPOINTS = 2;
 		const int NUM_OF_UBREAKABLE_BRICKS = 3;

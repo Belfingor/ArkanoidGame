@@ -6,12 +6,17 @@
 #include "Brick.h"
 #include <vector>
 #include "GameStateData.h"
+#include "BrickFactory.h"
+#include "LevelLoader.h"
+
+#include <unordered_map>
 
 
 namespace ArkanoidGame
 {
 	class Game;
 	class Brick;
+	class BrickFactory;
 
 	class GameStatePlayingData : public GameStateData
 	{
@@ -41,5 +46,13 @@ namespace ArkanoidGame
 
 		// Sounds
 		sf::Sound gameOverSound;
+
+		//Bricks Creator
+		std::unordered_map<BrickType, std::unique_ptr<BrickFactory>> brickFactories;
+		int unbreakableBricksCount = 0;
+
+		//Levels
+		LevelLoader levelLoader;
+		int currentLevel = 0;
 	};
 }

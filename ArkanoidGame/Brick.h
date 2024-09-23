@@ -24,15 +24,15 @@ namespace ArkanoidGame
 		bool IsBroken();
 	};
 	//--------------------------------------------------------------------------------
-	class SmoothDestroyBrick : public Brick, public iDelayedAction
+	class SimpleBrick : public Brick, public iDelayedAction
 	{
 	protected:
 		void OnHit() override;
 		sf::Color color;
 
 	public:
-		SmoothDestroyBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::Green);
-		~SmoothDestroyBrick() = default;
+		SimpleBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::Green);
+		~SimpleBrick() = default;
 
 		void Update(float timeDelta) override;
 		bool GetCollision(std::shared_ptr<iCollidable> collidableObject) const;

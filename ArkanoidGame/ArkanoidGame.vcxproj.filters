@@ -61,6 +61,12 @@
     <ClCompile Include="Brick.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="BrickFactory.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -119,6 +125,12 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="iDelayedAction.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickFactory.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLoader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,19 +36,19 @@ namespace ArkanoidGame
 		return hitCount <= 0;
 	}
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
-	void SmoothDestroyBrick::OnHit()
+	void SimpleBrick::OnHit()
 	{
 		StartTimer(SETTINGS.BRICK_BREAK_DELAY);
 	}
-	SmoothDestroyBrick::SmoothDestroyBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color) 
+	SimpleBrick::SimpleBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color) 
 	{
 
 	}
-	void SmoothDestroyBrick::Update(float timeDelta)
+	void SimpleBrick::Update(float timeDelta)
 	{
 		UpdateTimer(timeDelta);
 	}
-	bool SmoothDestroyBrick::GetCollision(std::shared_ptr<iCollidable> collidableObject) const
+	bool SimpleBrick::GetCollision(std::shared_ptr<iCollidable> collidableObject) const
 	{
 		if (isTimerStarted_)
 		{
@@ -61,11 +61,11 @@ namespace ArkanoidGame
 		rect.width *= 1.1f;
 		return GetRect().intersects(gameObject->GetRect());
 	}
-	void SmoothDestroyBrick::FinalAction()
+	void SimpleBrick::FinalAction()
 	{
 		hitCount -=1;
 	}
-	void SmoothDestroyBrick::EachTickAction(float deltaTime)
+	void SimpleBrick::EachTickAction(float deltaTime)
 	{
 		color.a = 255 * currentTime_ / destroyTime_;
 		sprite.setColor(color);
