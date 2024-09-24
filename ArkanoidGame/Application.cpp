@@ -27,27 +27,11 @@ namespace ArkanoidGame
 
 			float startTime = gameClock.getElapsedTime().asSeconds();
 
-			game.HandleWindowEvents(window);
-
 			if (!window.isOpen()) {
 				break;
 			}
 
-			if (game.Update(SETTINGS.TIME_PER_FRAME))
-			{
-				// Draw everything here
-				// Clear the window first
-				window.clear();
-
-				game.Draw(window);
-
-				// End the current frame, display window contents on screen
-				window.display();
-			}
-			else
-			{
-				window.close();
-			}
+			game.UpdateGame(SETTINGS.TIME_PER_FRAME, window);
 
 			float endTime = gameClock.getElapsedTime().asSeconds();
 			float deltaTime = endTime - startTime;

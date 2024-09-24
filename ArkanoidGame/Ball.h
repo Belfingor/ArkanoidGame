@@ -22,7 +22,8 @@ namespace ArkanoidGame
 		//--------------------------------------------------------------------------------
 		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
 		void ChangeAngle(float angle);
-		bool IsGameLost();
+		bool IsGameLost();    //////Delete this func from here, to be replaced in Game.h
+		void restart() override;
 
 	private:
 		void OnHit();
