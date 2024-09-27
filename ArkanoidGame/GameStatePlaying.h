@@ -8,6 +8,7 @@
 #include "GameStateData.h"
 #include "BrickFactory.h"
 #include "LevelLoader.h"
+#include "IObserver.h"
 
 #include <unordered_map>
 
@@ -18,7 +19,7 @@ namespace ArkanoidGame
 	class Brick;
 	class BrickFactory;
 
-	class GameStatePlayingData : public GameStateData
+	class GameStatePlayingData : public GameStateData, public IObserver, public std::enable_shared_from_this<GameStatePlayingData>
 	{
 	public:
 		void Init() override;
@@ -26,6 +27,7 @@ namespace ArkanoidGame
 		void Update(float timeDelta) override;
 		void Draw(sf::RenderWindow& window) override;
 		void LoadNextLevel();
+		void Notify(std::shared_ptr<IObservable> observable) override;
 
 	private:
 		void CreateBricks();
@@ -50,7 +52,7 @@ namespace ArkanoidGame
 
 		//Bricks Creator
 		std::unordered_map<BrickType, std::unique_ptr<BrickFactory>> brickFactories;
-		int unbreakableBricksCount = 0;
+		int breakableBricksCount = 0;
 
 		//Levels
 		LevelLoader levelLoader;

@@ -23,7 +23,9 @@ namespace ArkanoidGame
 
 		// Init GameObjects
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT/ 2.f })));
-		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f })));
+		auto ball = std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f }));
+		ball->AddObserver(weak_from_this());
+		gameObjects.emplace_back(ball);
 
 		//Init Brick Factories
 		brickFactories.emplace(BrickType::Simple, std::make_unique<SimpleBrickFactory>());
@@ -101,18 +103,6 @@ namespace ArkanoidGame
 		if (needInverseDirY) {
 			ball->InvertDirectionY();
 		}
-
-		const bool isGameWin = bricks.size() <= unbreakableBricksCount;
-		const bool isGameOver = !isCollision && ball->GetPosition().y > platform->GetRect().top;
-		Game& game = Application::Instance().GetGame();
-
-		if (isGameWin) {	
-			game.LoadNextLevel();
-		}
-		else if (isGameOver) {
-			gameOverSound.play();
-			game.LoseGame();
-		}
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -152,13 +142,33 @@ namespace ArkanoidGame
 			CreateBricks();
 		}
 	}
+	void GameStatePlayingData::Notify(std::shared_ptr<IObservable> observable)
+	{
+		if (auto brick = std::dynamic_pointer_cast<Brick>(observable); brick)
+		{
+			--breakableBricksCount;
+			Game& game = Application::Instance().GetGame();
+			if (breakableBricksCount == 0)
+			{
+				game.LoadNextLevel();
+			}
+		}
+		else if (auto ball = std::dynamic_pointer_cast<Ball>(observable); ball)
+		{
+			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
+			{
+				gameOverSound.play();
+				Application::Instance().GetGame().LoseGame();
+			}
+		}
+	}
 	void GameStatePlayingData::CreateBricks()
 	{
 		for (const auto& pair : brickFactories)
 		{
 			pair.second->ClearCounter();
 		}
-		auto& settings = SETTINGS;
+		auto self = weak_from_this();
 		auto level = levelLoader.GetLevel(currentLevel);
 
 		for (auto pairPosBrickType : level.m_bricks)
@@ -168,20 +178,18 @@ namespace ArkanoidGame
 
 			sf::Vector2f position
 			{
-				(float)(settings.BRICK_WIDTH / 2.f + pos.x * (settings.BRICK_WIDTH)) ,
-				(float)pos.y * settings.BRICK_HEIGHT
+				(float)(SETTINGS.BRICK_WIDTH / 2.f + pos.x * (SETTINGS.BRICK_WIDTH)) ,
+				(float)pos.y * SETTINGS.BRICK_HEIGHT
 			};
 	
 			bricks.emplace_back(brickFactories.at(brickType)->CreateBrick(position));
-			
+			bricks.back()->AddObserver(self);
 		}
 		
-		int breackableCount = 0;
 		for (const auto& pair : brickFactories)
 		{
-			breackableCount += pair.second->GetCreatedBreackableBricksCount();
+			breakableBricksCount += pair.second->GetCreatedBreackableBricksCount();
 		}
-		unbreakableBricksCount = bricks.size() - breackableCount;
 	}
 
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY)

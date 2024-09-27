@@ -191,6 +191,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateData.h" />
     <ClInclude Include="iDelayedAction.h" />
+    <ClInclude Include="IObserver.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Platform.h" />

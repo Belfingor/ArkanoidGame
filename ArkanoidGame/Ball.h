@@ -7,10 +7,11 @@
 #include "GameObject.h"
 #include "iCollidable.h"
 #include "randomizer.h"
+#include "IObserver.h"
 
 namespace ArkanoidGame
 {
-	class Ball final : public GameObject, public iCollidable
+	class Ball final : public GameObject, public iCollidable, public IObservable
 	{
 	public:
 		Ball(const sf::Vector2f& position);

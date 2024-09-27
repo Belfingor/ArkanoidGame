@@ -7,10 +7,11 @@
 #include "GameObject.h"
 #include "iCollidable.h"
 #include "iDelayedAction.h"
+#include "Iobserver.h"
 
 namespace ArkanoidGame
 {
-	class Brick : public GameObject, public iCollidable
+	class Brick : public GameObject, public iCollidable, public IObservable
 	{
 	protected:
 		void OnHit() override;

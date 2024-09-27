@@ -10,6 +10,7 @@ namespace ArkanoidGame
 	void Brick::OnHit()
 	{
 		hitCount -= 1;
+		Emit();
 	}
 	Brick::Brick(const sf::Vector2f& position, const sf::Color& color) : GameObject(SETTINGS.RESOURCES_PATH + TEXTURE_PATH, position, SETTINGS.BRICK_WIDTH, SETTINGS.BRICK_HEIGHT)
 	{
@@ -64,6 +65,7 @@ namespace ArkanoidGame
 	void SimpleBrick::FinalAction()
 	{
 		hitCount -=1;
+		Emit();
 	}
 	void SimpleBrick::EachTickAction(float deltaTime)
 	{

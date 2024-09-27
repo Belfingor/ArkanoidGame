@@ -16,27 +16,27 @@ namespace ArkanoidGame
 		{
 		case GameStateType::GameOver:
 		{
-			data = std::make_unique<GameStateGameOverData>();
+			data = std::make_shared<GameStateGameOverData>();
 			break;
 		}
 		case GameStateType::MainMenu:
 		{
-			data = std::make_unique<GameStateMainMenuData>();
+			data = std::make_shared<GameStateMainMenuData>();
 			break;
 		}
 		case GameStateType::PauseMenu:
 		{
-			data = std::make_unique<GameStatePauseMenuData>();
+			data = std::make_shared<GameStatePauseMenuData>();
 			break;
 		}
 		case GameStateType::Playing:
 		{
-			data = std::make_unique<GameStatePlayingData>();
+			data = std::make_shared<GameStatePlayingData>();
 			break;
 		}
 		case GameStateType::Records:
 		{
-			data = std::make_unique<GameStateRecordsData>();
+			data = std::make_shared<GameStateRecordsData>();
 			break;
 		}
 		default:
