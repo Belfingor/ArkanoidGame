@@ -166,10 +166,12 @@
     <ClCompile Include="BrickFactory.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameStateAddToRecordsTable.cpp" />
     <ClCompile Include="GameStateData.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Platform.cpp" />
+    <ClCompile Include="RecordsTable.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -186,6 +188,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickFactory.h" />
+    <ClInclude Include="GameStateAddToRecordsTable.h" />
     <ClInclude Include="iCollidable.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="randomizer.h" />
+    <ClInclude Include="RecordsTable.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameSettings.h" />

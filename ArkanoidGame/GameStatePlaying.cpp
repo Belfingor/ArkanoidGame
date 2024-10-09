@@ -34,10 +34,14 @@ namespace ArkanoidGame
 		brickFactories.emplace(BrickType::Glass, std::make_unique<GlassBrickFactory>());
 		CreateBricks();
 	
+		// Reset score
+		RECORDS->playerScore = 0;
+
 		//Init Texts
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
 		scoreText.setFillColor(sf::Color::Yellow);
+		scoreText.setString("Score: " + std::to_string(RECORDS->playerScore));
 
 		inputHintText.setFont(font);
 		inputHintText.setCharacterSize(24);
@@ -92,6 +96,8 @@ namespace ArkanoidGame
 
 							GetBallInverse(ballPos, brickRect, needInverseDirX, needInverseDirY);
 						}
+						RECORDS->playerScore++;
+						scoreText.setString("Score: " + std::to_string(RECORDS->playerScore));
 					}
 					return brick->IsBroken();
 				}),
@@ -158,7 +164,12 @@ namespace ArkanoidGame
 			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
 			{
 				gameOverSound.play();
+				
 				Application::Instance().GetGame().LoseGame();
+			}
+			if (ball->IsGameLost())
+			{
+				return;
 			}
 		}
 	}

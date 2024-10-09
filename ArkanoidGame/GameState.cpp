@@ -6,6 +6,7 @@
 #include "GameStatePlaying.h"
 #include "GameStateRecords.h"
 #include "GameStateData.h"
+#include "GameStateAddToRecordsTable.h"
 
 
 namespace ArkanoidGame
@@ -37,6 +38,11 @@ namespace ArkanoidGame
 		case GameStateType::Records:
 		{
 			data = std::make_shared<GameStateRecordsData>();
+			break;
+		}
+		case GameStateType::AddToRecords:
+		{
+			data = std::make_shared<GameStateAddToRecordsTableData>();
 			break;
 		}
 		default:

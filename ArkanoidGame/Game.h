@@ -32,6 +32,7 @@ namespace ArkanoidGame
 		void PauseGame();
 		void WinGame();
 		void LoseGame();
+		void AddScoreToRecordsTable();
 		void UpdateGame(float timeDelta, sf::RenderWindow& window);
 		void ExitGame();
 		void QuitGame();
@@ -48,7 +49,6 @@ namespace ArkanoidGame
 		void SetOption(GameOptions option, bool value);
 
 		const RecordsTable& GetRecordsTable() const { return recordsTable; }
-		int GetRecordByPlayerId(const std::string& playerId) const;
 
 		// Remove current game state from the stack
 		void PopState();
@@ -62,7 +62,6 @@ namespace ArkanoidGame
 		void Draw(sf::RenderWindow& window);
 		void Shutdown();
 
-		void UpdateRecord(const std::string& playerId, int score);
 
 		// Add new game state on top of the stack
 		void PushState(GameStateType stateType, bool isExclusivelyVisible);

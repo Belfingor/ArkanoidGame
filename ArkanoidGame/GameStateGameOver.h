@@ -19,11 +19,11 @@ namespace ArkanoidGame
 		sf::Font font;
 
 		float timeSinceGameOver = 0.f;
+		bool wasRecoredAdded = false;
 
 		// UI data
 		sf::RectangleShape background;
 		sf::Text gameOverText;
 		sf::Text hintText;
-		std::vector<sf::Text> recordsTableTexts;
 	};
 }

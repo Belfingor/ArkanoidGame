@@ -6,6 +6,7 @@
 #include "GameStatePauseMenu.h"
 #include "GameStateMainMenu.h"
 #include "GameStateRecords.h"
+#include "GameStateAddToRecordsTable.h"
 
 namespace ArkanoidGame
 {
@@ -24,6 +25,10 @@ namespace ArkanoidGame
 	void Game::LoseGame()
 	{
 		PushState(GameStateType::GameOver, false);
+	}
+	void Game::AddScoreToRecordsTable()
+	{
+		PushState(GameStateType::AddToRecords, false);
 	}
 	void Game::UpdateGame(float timeDelta, sf::RenderWindow& window)
 	{
@@ -64,16 +69,6 @@ namespace ArkanoidGame
 	}
 	Game::Game()
 	{
-		// Generate fake records table
-		recordsTable =
-		{
-			{"John", SETTINGS.MAX_APPLES / 2},
-			{"Jane", SETTINGS.MAX_APPLES / 3 },
-			{"Alice", SETTINGS.MAX_APPLES / 4 },
-			{"Bob", SETTINGS.MAX_APPLES / 5 },
-			{"Clementine", SETTINGS.MAX_APPLES / 5 },
-		};
-
 		stateChangeType = GameStateChangeType::None;
 		pendingGameStateType = GameStateType::None;
 		pendingGameStateIsExclusivelyVisible = false;
@@ -211,16 +206,4 @@ namespace ArkanoidGame
 			options = (GameOptions)((std::uint8_t)options & ~(std::uint8_t)option);
 		}
 	}
-
-	int Game::GetRecordByPlayerId(const std::string& playerId) const
-	{
-		auto it = recordsTable.find(playerId);
-		return it == recordsTable.end() ? 0 : it->second;
-	}
-
-	void Game::UpdateRecord(const std::string& playerId, int score)
-	{
-		recordsTable[playerId] = std::max(recordsTable[playerId], score);
-	}
-
 }

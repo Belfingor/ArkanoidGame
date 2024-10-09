@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "GameStateData.h"
+#include "RecordsTable.h"
 
 namespace ArkanoidGame
 {

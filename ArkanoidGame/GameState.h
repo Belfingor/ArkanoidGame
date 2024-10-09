@@ -12,7 +12,8 @@ namespace ArkanoidGame
 		Playing,
 		GameOver,
 		PauseMenu,
-		Records
+		Records,
+		AddToRecords
 	};
 
 

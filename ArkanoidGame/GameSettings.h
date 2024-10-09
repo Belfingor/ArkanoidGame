@@ -23,6 +23,7 @@ namespace ArkanoidGame
 		const std::string FONTS_PATH = RESOURCES_PATH + "Fonts/";
 		const std::string SOUNDS_PATH = RESOURCES_PATH + "Sounds/";
 		const std::string LELEVS_CONFIG_PATH = RESOURCES_PATH + "levels.config";
+		const std::string RECORDS_TABLE_PATH = RESOURCES_PATH + "Records.dat";
 
 		// Game settings constants
 		const unsigned int SCREEN_WIDTH = 800;
@@ -47,7 +48,8 @@ namespace ArkanoidGame
 		const int NUM_OF_UBREAKABLE_BRICKS = 3;
 		//--------------------------------------------------------------------------------
 
-		const int MAX_RECORDS_TABLE_SIZE = 5;
+		const int MAX_RECORDS_TABLE_SIZE_MAIN_MENU = 10;
+		const int MAX_RECORDS_TABLE_SIZE_GAME_OVER = 5;
 		const char* PLAYER_NAME; // We need to define this constant in some CPP
 
 		const std::string GAME_NAME = "ArkanoidGame";

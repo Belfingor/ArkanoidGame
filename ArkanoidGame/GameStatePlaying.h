@@ -9,6 +9,7 @@
 #include "BrickFactory.h"
 #include "LevelLoader.h"
 #include "IObserver.h"
+#include "RecordsTable.h"
 
 #include <unordered_map>
 
