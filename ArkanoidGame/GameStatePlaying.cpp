@@ -96,7 +96,10 @@ namespace ArkanoidGame
 
 							GetBallInverse(ballPos, brickRect, needInverseDirX, needInverseDirY);
 						}
-						RECORDS->playerScore++;
+					}
+					if (brick->IsBroken())
+					{
+						RECORDS->playerScore += brick->scoreContainer;
 						scoreText.setString("Score: " + std::to_string(RECORDS->playerScore));
 					}
 					return brick->IsBroken();

@@ -47,11 +47,12 @@ namespace ArkanoidGame
 		const int MULTIHIT_BRICK_HITPOINTS = 2;
 		const int NUM_OF_UBREAKABLE_BRICKS = 3;
 		//--------------------------------------------------------------------------------
-
 		const int MAX_RECORDS_TABLE_SIZE_MAIN_MENU = 10;
 		const int MAX_RECORDS_TABLE_SIZE_GAME_OVER = 5;
 		const char* PLAYER_NAME; // We need to define this constant in some CPP
-
+		//--------------------------------------------------------------------------------
+		const int MYLTIHIT_BRICK_SCORE = 3;
+		//--------------------------------------------------------------------------------
 		const std::string GAME_NAME = "ArkanoidGame";
 	};
 }

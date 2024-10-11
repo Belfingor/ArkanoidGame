@@ -23,6 +23,8 @@ namespace ArkanoidGame
 		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
 		void Update(float timeDelta) override;
 		bool IsBroken();
+
+		int scoreContainer = 1;
 	};
 	//--------------------------------------------------------------------------------
 	class SimpleBrick : public Brick, public iDelayedAction
