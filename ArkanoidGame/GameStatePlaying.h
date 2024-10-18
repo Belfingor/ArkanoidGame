@@ -47,6 +47,8 @@ namespace ArkanoidGame
 		sf::Text scoreText;
 		sf::Text inputHintText;
 		sf::RectangleShape background;
+		sf::Texture heartTexture;
+		std::vector <sf::Sprite> heartSprites;
 
 		// Sounds
 		sf::Sound gameOverSound;

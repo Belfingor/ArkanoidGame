@@ -90,7 +90,7 @@ namespace ArkanoidGame
 	MultiHitBrick::MultiHitBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color)
 	{
 		hitCount = SETTINGS.MULTIHIT_BRICK_HITPOINTS;
-		scoreContainer = SETTINGS.MYLTIHIT_BRICK_SCORE;
+		scoreContainer = SETTINGS.MULTIHIT_BRICK_SCORE;
 	}
 	void MultiHitBrick::OnHit()
 	{

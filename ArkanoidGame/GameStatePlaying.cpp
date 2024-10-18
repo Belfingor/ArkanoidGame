@@ -15,6 +15,15 @@ namespace ArkanoidGame
 		// Init game resources (terminate if error)
 		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
 		assert(gameOverSoundBuffer.loadFromFile(SETTINGS.SOUNDS_PATH + "Death.wav"));
+		assert(heartTexture.loadFromFile(SETTINGS.HEART_TEXTURE_PATH));
+
+		for (int i = 0; i < SETTINGS.PLAYER_LIVES; i++)
+		{
+			sf::Sprite sprite;
+			InitSprite(sprite, 63.f, 50.f, heartTexture);
+			sprite.setPosition(170.f + i * 60.f, 30.f);
+			heartSprites.push_back(std::move(sprite));
+		}
 
 		// Init background
 		background.setSize(sf::Vector2f(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT));
@@ -23,7 +32,7 @@ namespace ArkanoidGame
 
 		// Init GameObjects
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT/ 2.f })));
-		auto ball = std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f }));
+		auto ball = std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT / 2.f - SETTINGS.BALL_SIZE / 2.f }));
 		ball->AddObserver(weak_from_this());
 		gameObjects.emplace_back(ball);
 
@@ -131,6 +140,8 @@ namespace ArkanoidGame
 		sf::Vector2f viewSize = window.getView().getSize();
 		inputHintText.setPosition(viewSize.x - 10.f, 10.f);
 		window.draw(inputHintText);
+
+		DrawSprites(heartSprites.begin(), heartSprites.end(), window);
 	}
 	void GameStatePlayingData::LoadNextLevel()
 	{
@@ -166,13 +177,19 @@ namespace ArkanoidGame
 		{
 			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
 			{
-				gameOverSound.play();
 				
-				Application::Instance().GetGame().LoseGame();
-			}
-			if (ball->IsGameLost())
-			{
-				return;
+				--ball->playersLives;
+				if (ball->playersLives == 0)
+				{
+					heartSprites.pop_back();
+					gameOverSound.play();
+					Application::Instance().GetGame().LoseGame();
+				}
+				else
+				{
+					ball->restart();
+					heartSprites.pop_back();
+				}
 			}
 		}
 	}

@@ -35,8 +35,10 @@ namespace ArkanoidGame
 		MenuItem pauseMenu;
 		pauseMenu.childrenOrientation = Orientation::Vertical;
 		pauseMenu.childrenAlignment = Alignment::Middle;
+		pauseMenu.childrenSpacing = 10.f;
 		pauseMenu.childrens.push_back(resumeItem);
 		pauseMenu.childrens.push_back(exitItem);
+		
 
 		menu.Init(pauseMenu);
 	}
