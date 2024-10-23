@@ -25,6 +25,9 @@ namespace ArkanoidGame
 		const std::string LELEVS_CONFIG_PATH = RESOURCES_PATH + "levels.config";
 		const std::string RECORDS_TABLE_PATH = RESOURCES_PATH + "Records.dat";
 		const std::string HEART_TEXTURE_PATH = TEXTURES_PATH + "Heart.png";
+		const std::string FIREBALL_MODIFIER_TEXTURE_PATH = TEXTURES_PATH + "FireBall.png";
+		const std::string FRAGILEBRICKS_MODIFIER_TEXTURE_PATH = TEXTURES_PATH + "FragileBricks.png";
+		const std::string SPEEDBOOST_MODIFIER_TEXTURE_PATH = TEXTURES_PATH + "SpeedBoost.png";
 
 		// Game settings constants
 		const unsigned int SCREEN_WIDTH = 800;
@@ -38,6 +41,9 @@ namespace ArkanoidGame
 		//----------------------------------------------
 		const float BALL_SIZE = 20.f;
 		const float BALL_SPEED = 200.f;
+		//----------------------------------------------
+		const float MODIFIER_SIZE = 10.f;
+		const float MODIFIER_SPEED = 300.f;
 		//----------------------------------------------
 		const float BRICK_WIDTH = 80.f;
 		const float BRICK_HEIGHT = 32.f;

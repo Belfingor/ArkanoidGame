@@ -10,6 +10,7 @@
 #include "LevelLoader.h"
 #include "IObserver.h"
 #include "RecordsTable.h"
+#include "Modifier.h"
 
 #include <unordered_map>
 
@@ -33,6 +34,7 @@ namespace ArkanoidGame
 	private:
 		void CreateBricks();
 		void GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY);
+		void ChooseRandomModifierToInit(float posX, float posY);
 
 
 		// Resources

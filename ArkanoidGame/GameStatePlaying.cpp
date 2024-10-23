@@ -84,7 +84,22 @@ namespace ArkanoidGame
 		std::shared_ptr <Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
 		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
 
-		auto isCollision = platform->CheckCollision(ball);
+		auto isCollision = platform->CheckCollision(ball); 
+		if (gameObjects.size() > 2) //only checking collision with platform and modifier if there is any to check with
+		{
+			for (size_t i = 2; i < gameObjects.size(); i++) 
+			{
+				std::shared_ptr<Modifier> Mod = std::dynamic_pointer_cast<Modifier>(gameObjects[i]);
+				if (Mod->CheckCollision(platform))
+				{
+					gameObjects.erase(gameObjects.begin() + i);
+				}
+				else if (Mod->DidModReachTheFloor())
+				{
+					gameObjects.erase(gameObjects.begin() + i);
+				}
+			}
+		}
 
 		bool needInverseDirX = false;
 		bool needInverseDirY = false;
@@ -93,7 +108,8 @@ namespace ArkanoidGame
 		//remove-erase idiom
 		bricks.erase(
 			std::remove_if(bricks.begin(), bricks.end(),
-				[ball, &hasBrokeOneBrick, &needInverseDirX, &needInverseDirY, this](auto brick) {
+				[ball, &hasBrokeOneBrick, &needInverseDirX, &needInverseDirY, this](auto brick) 
+				{
 					if ((!hasBrokeOneBrick) && brick->CheckCollision(ball))
 					{
 						auto glassBrick = dynamic_cast<GlassBrick*>(brick.get());
@@ -110,7 +126,15 @@ namespace ArkanoidGame
 					{
 						RECORDS->playerScore += brick->scoreContainer;
 						scoreText.setString("Score: " + std::to_string(RECORDS->playerScore));
+
+						// Init modifier with 10% chance
+						int modifierProcChance = 1 + (rand() % 10);
+						if (modifierProcChance == 1)
+						{
+							ChooseRandomModifierToInit(brick->GetPosition().x, brick->GetPosition().y);
+						}
 					}
+				
 					return brick->IsBroken();
 				}),
 			bricks.end()
@@ -236,6 +260,24 @@ namespace ArkanoidGame
 		if (ballPos.x > brickRect.left + brickRect.width)
 		{
 			needInverseDirX = true;
+		}
+	}
+	void GameStatePlayingData::ChooseRandomModifierToInit(float posX, float posY)
+	{
+		int randomModifier = 1 + (rand() % 3);
+		switch (randomModifier)
+		{
+		case 1:
+			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
+			break;
+		case 2:
+			gameObjects.emplace_back(std::make_shared<FragileBricksModifier>(sf::Vector2f({ posX, posY })));
+			break;
+		case 3:
+			gameObjects.emplace_back(std::make_shared<SppedBoostModifier>(sf::Vector2f({ posX, posY })));
+			break;
+		default:
+			break;
 		}
 	}
 }
