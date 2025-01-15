@@ -26,6 +26,7 @@ namespace ArkanoidGame
 		bool IsGameLost();    //////Delete this func from here, to be replaced in Game.h
 		void restart() override;
 		int playersLives = SETTINGS.PLAYER_LIVES;
+		sf::Vector2f direction;
 
 	private:
 		void OnHit();
