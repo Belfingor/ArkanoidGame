@@ -9,7 +9,16 @@
 
 namespace ArkanoidGame
 {
-	class Modifier : public GameObject, public iCollidable/*, public IObservable*/
+	enum class ModifierType //to identify which modifier to apply
+	{
+		FireBall,
+		FragileBricks,
+		SpeedBoost,
+		Default
+	};
+
+
+	class Modifier : public GameObject, public iCollidable
 	{
 	public:
 		Modifier(const sf::Vector2f& position, const std::string& texturePath);
@@ -18,6 +27,7 @@ namespace ArkanoidGame
 		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
 		void OnHit() override;
 		bool DidModReachTheFloor();
+		virtual ModifierType GetModifierType() const { return ModifierType::Default; }
 	};
 	//-----------------------------------------------------------------------------
 	class FireBallModifier final : public Modifier
@@ -26,6 +36,7 @@ namespace ArkanoidGame
 		FireBallModifier(const sf::Vector2f& position, const std::string& texturePath = SETTINGS.FIREBALL_MODIFIER_TEXTURE_PATH);
 
 		~FireBallModifier() = default;
+		ModifierType GetModifierType() const override;
 	};
 	//-----------------------------------------------------------------------------
 	class FragileBricksModifier final : public Modifier
@@ -33,6 +44,7 @@ namespace ArkanoidGame
 	public:
 		FragileBricksModifier(const sf::Vector2f& position, const std::string& texturePath = SETTINGS.FRAGILEBRICKS_MODIFIER_TEXTURE_PATH);
 		~FragileBricksModifier() = default;
+		ModifierType GetModifierType() const override;
 	};
 	//-----------------------------------------------------------------------------
 	class SppedBoostModifier final : public Modifier
@@ -40,5 +52,6 @@ namespace ArkanoidGame
 	public:
 		SppedBoostModifier(const sf::Vector2f& position, const std::string& texturePath = SETTINGS.SPEEDBOOST_MODIFIER_TEXTURE_PATH);
 		~SppedBoostModifier() = default;
+		ModifierType GetModifierType() const override;
 	};
 }

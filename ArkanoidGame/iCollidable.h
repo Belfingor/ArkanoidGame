@@ -16,7 +16,6 @@ namespace ArkanoidGame
 			if (GetCollision(collidable))
 			{
 				OnHit();
-				collidable->OnHit();
 				return true;
 			}
 			return false;

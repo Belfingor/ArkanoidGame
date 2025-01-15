@@ -39,16 +39,19 @@ namespace ArkanoidGame
 	{
 
 	}
+	ModifierType FireBallModifier::GetModifierType() const { return ModifierType::FireBall; }
 	//-----------------------------------------------------------------------------
 	FragileBricksModifier::FragileBricksModifier(const sf::Vector2f& position, const std::string& texturePath)
 		: Modifier(position, texturePath)
 	{
 		
 	}
+	ModifierType FragileBricksModifier::GetModifierType() const { return ModifierType::FragileBricks; }
 	//-----------------------------------------------------------------------------
 	SppedBoostModifier::SppedBoostModifier(const sf::Vector2f& position, const std::string& texturePath)
 		: Modifier(position, texturePath)
 	{
 
 	}
+	ModifierType SppedBoostModifier::GetModifierType() const { return ModifierType::SpeedBoost; }
 }

@@ -58,9 +58,12 @@ namespace ArkanoidGame
 		//Bricks Creator
 		std::unordered_map<BrickType, std::unique_ptr<BrickFactory>> brickFactories;
 		int breakableBricksCount = 0;
-
+		
 		//Levels
 		LevelLoader levelLoader;
 		int currentLevel = 0;
+
+		// Modifiers data
+		bool isFireBallActive = false;
 	};
 }

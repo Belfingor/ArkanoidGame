@@ -11,7 +11,7 @@
 namespace ArkanoidGame
 {
 	void GameStatePlayingData::Init()
-	{
+	{	
 		// Init game resources (terminate if error)
 		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
 		assert(gameOverSoundBuffer.loadFromFile(SETTINGS.SOUNDS_PATH + "Death.wav"));
@@ -33,7 +33,7 @@ namespace ArkanoidGame
 		// Init GameObjects
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT/ 2.f })));
 		auto ball = std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT / 2.f - SETTINGS.BALL_SIZE / 2.f }));
-		ball->AddObserver(shared_from_this());
+		ball->AddObserver(weak_from_this());
 		gameObjects.emplace_back(ball);
 
 		//Init Brick Factories
@@ -81,8 +81,10 @@ namespace ArkanoidGame
 		std::for_each(gameObjects.begin(), gameObjects.end(), updateFunctor);
 		std::for_each(bricks.begin(), bricks.end(), updateFunctor);
 
+
 		std::shared_ptr <Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
 		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
+
 
 		auto isCollision = platform->CheckCollision(ball); 
 		if (gameObjects.size() > 2) //only checking collision with platform and modifier if there are any to check with
@@ -95,22 +97,23 @@ namespace ArkanoidGame
 					gameObjects.erase(gameObjects.begin() + i);
 					switch (Mod->GetModifierType())
 					{
-					case ModifierType::FireBall: //Init FireBall buff
+					case ModifierType::FireBall:
+						//gameObjects[1] = std::make_shared<FireBallDecorator>(ball->GetPosition(), ball);
 						gameObjects[1] = std::make_shared<FireBallDecorator>(ball);
-						//ball->AddObserver(weak_from_this());  // Does not work as expected. Need a different method to let observer know about the change
+						//ball = std::dynamic_pointer_cast<FireBallDecorator>(gameObjects[1]);
 						isFireBallActive = true;
 						break;
 					case ModifierType::FragileBricks:
-						gameObjects[1] = std::make_shared<Ball>(ball->GetPosition()); // other modifiers now simply revert fireBall to original ball
-						isFireBallActive = false;
+						gameObjects[1] = std::make_shared<Ball>(ball);
 						break;
 					case ModifierType::SpeedBoost:
-						gameObjects[1] = std::make_shared<Ball>(ball->GetPosition()); // other modifiers now simply revert fireBall to original ball
-						isFireBallActive = false;
+						//gameObjects[1] = std::make_shared<Ball>(ball->GetPosition());
+						gameObjects[1] = std::make_shared<Ball>(ball);
 						break;
 					default:
 						break;
 					}
+					//gameObjects.erase(gameObjects.begin() + i);
 				}
 				else if (Mod->DidModReachTheFloor())
 				{
@@ -121,6 +124,7 @@ namespace ArkanoidGame
 
 		bool needInverseDirX = false;
 		bool needInverseDirY = false;
+
 		bool hasBrokeOneBrick = false;
 		//remove-erase idiom
 		bricks.erase(
@@ -136,10 +140,11 @@ namespace ArkanoidGame
 							const auto ballPos = ball->GetPosition();
 							const auto brickRect = brick->GetRect();
 							
-							if (!isFireBallActive) //FireBall does not invert from bricks
+							if (!isFireBallActive)
 							{
 								GetBallInverse(ballPos, brickRect, needInverseDirX, needInverseDirY);
 							}
+							
 						}
 					}
 					if (brick->IsBroken())
@@ -147,13 +152,14 @@ namespace ArkanoidGame
 						RECORDS->playerScore += brick->scoreContainer;
 						scoreText.setString("Score: " + std::to_string(RECORDS->playerScore));
 
-						// Init modifier on collision with any brick with 10% chance
+						// Init modifier with 10% chance
 						int modifierProcChance = 1 + (rand() % 10);
-						if (modifierProcChance > 2) //replace 2 with 5 later on
+						if (modifierProcChance > 5)
 						{
 							ChooseRandomModifierToInit(brick->GetPosition().x, brick->GetPosition().y);
 						}
 					}
+				
 					return brick->IsBroken();
 				}),
 			bricks.end()
@@ -216,7 +222,7 @@ namespace ArkanoidGame
 				game.LoadNextLevel();
 			}
 		}
-		if (auto ball = std::dynamic_pointer_cast<Ball>(observable); ball)
+		else if (auto ball = std::dynamic_pointer_cast<Ball>(observable); ball)
 		{
 			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
 			{
@@ -269,10 +275,6 @@ namespace ArkanoidGame
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY)
 	{
 		if (ballPos.y > brickRect.top + brickRect.height)
-		{
-			needInverseDirY = true;
-		}
-		else if (ballPos.y < brickRect.top)
 		{
 			needInverseDirY = true;
 		}
