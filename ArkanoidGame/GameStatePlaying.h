@@ -35,6 +35,21 @@ namespace ArkanoidGame
 		void CreateBricks();
 		void GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY);
 		void ChooseRandomModifierToInit(float posX, float posY);
+		//-----------------------------------------------------------------------------
+		void ActivateFireBallBuff(std::shared_ptr<Ball>ball)
+		{
+			ball = std::make_shared<FireBallDecorator>(ball);
+			ball->AddObserver(weak_from_this());
+			gameObjects[1] = ball;
+			isFireBallActive = true;
+		}
+		void DeactivateFireBallBuff(std::shared_ptr<Ball>ball)
+		{
+			ball = std::make_shared<Ball>(ball->GetPosition(), ball->GetDirection());
+			gameObjects[1] = ball;
+			ball->AddObserver(weak_from_this());
+			isFireBallActive = false;
+		}
 
 
 		// Resources

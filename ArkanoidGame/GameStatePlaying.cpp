@@ -19,7 +19,7 @@ namespace ArkanoidGame
 
 		for (int i = 0; i < SETTINGS.PLAYER_LIVES; i++)
 		{
-			sf::Sprite sprite;
+			sf::Sprite sprite; 
 			InitSprite(sprite, 63.f, 50.f, heartTexture);
 			sprite.setPosition(170.f + i * 60.f, 30.f);
 			heartSprites.push_back(std::move(sprite));
@@ -33,7 +33,7 @@ namespace ArkanoidGame
 		// Init GameObjects
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PlATFORM_HEIGHT/ 2.f })));
 		auto ball = std::make_shared<Ball>(sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT / 2.f - SETTINGS.BALL_SIZE / 2.f }));
-		ball->AddObserver(shared_from_this());
+		ball->AddObserver(weak_from_this());
 		gameObjects.emplace_back(ball);
 
 		//Init Brick Factories
@@ -75,7 +75,7 @@ namespace ArkanoidGame
 
 	void GameStatePlayingData::Update(float timeDelta)
 	{
-		
+
 		static auto updateFunctor = [timeDelta](auto obj) { obj->Update(timeDelta); };
 
 		std::for_each(gameObjects.begin(), gameObjects.end(), updateFunctor);
@@ -83,6 +83,7 @@ namespace ArkanoidGame
 
 		std::shared_ptr <Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
 		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
+		
 
 		auto isCollision = platform->CheckCollision(ball); 
 		if (gameObjects.size() > 2) //only checking collision with platform and modifier if there are any to check with
@@ -95,19 +96,18 @@ namespace ArkanoidGame
 					gameObjects.erase(gameObjects.begin() + i);
 					switch (Mod->GetModifierType())
 					{
-					case ModifierType::FireBall: //Init FireBall buff
-						gameObjects[1] = std::make_shared<FireBallDecorator>(ball);
-						//ball->AddObserver(weak_from_this());  // Does not work as expected. Need a different method to let observer know about the change
-						isFireBallActive = true;
+					case ModifierType::FireBall:
+						ActivateFireBallBuff(ball);
 						break;
+					//-----------------------------------------------------------------------------
+					//OTHER MODIFIERS RESET BALL BACK TO ORIGINAL FOR NOW
 					case ModifierType::FragileBricks:
-						gameObjects[1] = std::make_shared<Ball>(ball->GetPosition()); // other modifiers now simply revert fireBall to original ball
-						isFireBallActive = false;
+						DeactivateFireBallBuff(ball); 
 						break;
 					case ModifierType::SpeedBoost:
-						gameObjects[1] = std::make_shared<Ball>(ball->GetPosition()); // other modifiers now simply revert fireBall to original ball
-						isFireBallActive = false;
+						DeactivateFireBallBuff(ball);
 						break;
+					//-----------------------------------------------------------------------------
 					default:
 						break;
 					}
@@ -222,7 +222,7 @@ namespace ArkanoidGame
 			{
 				
 				--ball->playersLives;
-				if (ball->playersLives == 0)
+				if (heartSprites.size() == 1)
 				{
 					heartSprites.pop_back();
 					gameOverSound.play();
