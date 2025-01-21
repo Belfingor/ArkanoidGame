@@ -45,29 +45,45 @@ namespace ArkanoidGame
 	//--------------------------------------------------------------------------------
 	class UnbreackableBrick : public Brick
 	{
+	protected:
+		void OnHit() override;
+
 	public:
 		UnbreackableBrick(const sf::Vector2f& position);
 		~UnbreackableBrick() = default;
-		void OnHit() override;
+		
 		void Update(float deltaTime) override;
 	};
 	//--------------------------------------------------------------------------------
-	class MultiHitBrick : public Brick
+	class MultiHitBrick : public Brick , public iDelayedAction
 	{
 	protected:
+		void OnHit() override;
 		sf::Color color;
 	public:
 		MultiHitBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::White);
 		~MultiHitBrick() = default;
-
-		void OnHit() override;
 		void Update(float deltaTime) override;
+		bool GetCollision(std::shared_ptr<iCollidable> collidableObject) const override;
+		void FinalAction();
+		void EachTickAction(float deltaTime);
+
+
 	};
 	//--------------------------------------------------------------------------------
-	class GlassBrick : public Brick
+	class GlassBrick : public Brick, public iDelayedAction
 	{
+	protected:
+		void OnHit() override;
+		sf::Color color;
+
 	public:
 		GlassBrick(const sf::Vector2f& position, const sf::Color& color = sf::Color::Blue);
-		~GlassBrick() = default;
+		~GlassBrick() = default; 
+
+		void Update(float deltaTime) override;
+		bool GetCollision(std::shared_ptr<iCollidable> collidableObject) const override;
+		void FinalAction() override;
+		void EachTickAction(float deltaTime) override;
 	};
 }

@@ -87,14 +87,21 @@ namespace ArkanoidGame
 	}
 
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
-	MultiHitBrick::MultiHitBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color)
+	MultiHitBrick::MultiHitBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color)
 	{
 		hitCount = SETTINGS.MULTIHIT_BRICK_HITPOINTS;
 		scoreContainer = SETTINGS.MULTIHIT_BRICK_SCORE;
 	}
 	void MultiHitBrick::OnHit()
 	{
-		--hitCount;
+		if (hitCount == 1)
+		{
+			StartTimer(SETTINGS.BRICK_BREAK_DELAY);
+		}
+		else
+		{
+			hitCount -= 1;
+		}
 	}
 	void MultiHitBrick::Update(float deltaTime)
 	{
@@ -107,15 +114,70 @@ namespace ArkanoidGame
 		case 1:
 			//set CrackedTexture
 			Brick::texture.loadFromFile(SETTINGS.RESOURCES_PATH + "Textures/Damaged_Brick.png");
+			UpdateTimer(deltaTime);
 			break;
 		default:
 			break;
 		}
 	}
+	bool MultiHitBrick::GetCollision(std::shared_ptr<iCollidable> collidableObject) const
+	{
+		if (isTimerStarted_)
+		{
+			return false;
+		}
+
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidableObject);
+		assert(gameObject);
+		sf::Rect rect = gameObject->GetRect();
+		rect.width *= 1.1f;
+		return GetRect().intersects(gameObject->GetRect());
+	}
+	void MultiHitBrick::FinalAction()
+	{
+		hitCount -= 1;
+		Emit();
+	}
+	void MultiHitBrick::EachTickAction(float deltaTime)
+	{
+		color.a = 255 * currentTime_ / destroyTime_;
+		sprite.setColor(color);
+	}
+	void GlassBrick::OnHit()
+	{
+		StartTimer(SETTINGS.BRICK_BREAK_DELAY);
+	}
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
-	GlassBrick::GlassBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color)
+	GlassBrick::GlassBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color)
 	{
 
+	}
+	void GlassBrick::Update(float deltaTime)
+	{
+		UpdateTimer(deltaTime);
+	}
+	bool GlassBrick::GetCollision(std::shared_ptr<iCollidable> collidableObject) const
+	{
+		if (isTimerStarted_)
+		{
+			return false;
+		}
+
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidableObject);
+		assert(gameObject);
+		sf::Rect rect = gameObject->GetRect();
+		rect.width *= 1.1f;
+		return GetRect().intersects(gameObject->GetRect());
+	}
+	void GlassBrick::FinalAction()
+	{
+		hitCount -= 1;
+		Emit();
+	}
+	void GlassBrick::EachTickAction(float deltaTime)
+	{
+		color.a = 255 * currentTime_ / destroyTime_;
+		sprite.setColor(color);
 	}
 }
 	
