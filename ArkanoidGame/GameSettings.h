@@ -46,6 +46,7 @@ namespace ArkanoidGame
 		const float MODIFIER_SIZE = 10.f;
 		const float MODIFIER_SPEED = 300.f;
 		const float FIREBALL_SPEED = 300.f;
+		const float BUFF_DURATION = 5.f; // in seconds
 		//----------------------------------------------
 		const float BRICK_WIDTH = 80.f;
 		const float BRICK_HEIGHT = 32.f;

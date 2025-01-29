@@ -11,12 +11,11 @@ namespace ArkanoidGame
 		float destroyTime_ = 0.f;
 		float currentTime_ = 0.f;
 
-		virtual void UpdateTimer(float deltaTime)
+		virtual void UpdateTimer(float timeDelta)
 		{
-			if(!isTimerStarted_)
-				return;
-			currentTime_ -= deltaTime;
-			EachTickAction(deltaTime);
+			if(!isTimerStarted_) return;
+			currentTime_ -= timeDelta;
+			EachTickAction(timeDelta);
 			if(currentTime_ <= 0.f)
 			{
 				FinalAction();
@@ -24,7 +23,7 @@ namespace ArkanoidGame
 			}
 		}
 
-		virtual void EachTickAction(float deltaTime) = 0;
+		virtual void EachTickAction(float timeDelta) = 0;
 		virtual void FinalAction() = 0;
 	public:
 		void StartTimer(float destroyTime)

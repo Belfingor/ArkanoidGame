@@ -36,22 +36,32 @@ namespace ArkanoidGame
 		void GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& brickRect, bool& needInverseDirX, bool& needInverseDirY);
 		void ChooseRandomModifierToInit(float posX, float posY);
 		//-----------------------------------------------------------------------------
-		void ActivateFireBallBuff(std::shared_ptr<Ball>ball)
+		void ActivateFireBallBuff(std::shared_ptr<Ball>ball);
+		void DeactivateFireBallBuff(std::shared_ptr<Ball>ball);
+
+
+		void StartBuffTimer()
 		{
-			ball = std::make_shared<FireBallDecorator>(ball);
-			ball->AddObserver(weak_from_this());
-			gameObjects[1] = ball;
-			isFireBallActive = true;
+			buffRemainingTime = buffDurationTime;
+			isBuffTimerStarted = true;
 		}
-		void DeactivateFireBallBuff(std::shared_ptr<Ball>ball)
+
+		void UpdateBuffTimer(float timeDelta)
 		{
-			ball = std::make_shared<Ball>(ball->GetPosition(), ball->GetDirection());
-			gameObjects[1] = ball;
-			ball->AddObserver(weak_from_this());
-			isFireBallActive = false;
+			if (!isBuffTimerStarted) return;
+			buffRemainingTime -= timeDelta;
+			if (buffRemainingTime <= 0.f)
+			{
+				buffRemainingTime = 0.f;
+				isTimeToRemoveFireBall = true;
+				isBuffTimerStarted = false;
+			}
 		}
 
 
+
+
+		//-----------------------------------------------------------------------------
 		// Resources
 		sf::Font font;
 		sf::SoundBuffer gameOverSoundBuffer;
@@ -79,6 +89,10 @@ namespace ArkanoidGame
 		int currentLevel = 0;
 
 		// Modifiers data
+		bool isBuffTimerStarted = false;
+		float buffDurationTime = SETTINGS.BUFF_DURATION;
+		float buffRemainingTime = 0.f;
 		bool isFireBallActive = false;
+		bool isTimeToRemoveFireBall = false;
 	};
 }

@@ -84,6 +84,12 @@ namespace ArkanoidGame
 		std::shared_ptr <Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
 		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
 		
+		// Check if need to deactivate any buffs
+		UpdateBuffTimer(timeDelta);
+		if (isTimeToRemoveFireBall)
+		{
+			DeactivateFireBallBuff(ball);
+		}
 
 		auto isCollision = platform->CheckCollision(ball); 
 		if (gameObjects.size() > 2) //only checking collision with platform and modifier if there are any to check with
@@ -98,14 +104,14 @@ namespace ArkanoidGame
 					{
 					case ModifierType::FireBall:
 						ActivateFireBallBuff(ball);
+						StartBuffTimer();
 						break;
 					//-----------------------------------------------------------------------------
-					//OTHER MODIFIERS RESET BALL BACK TO ORIGINAL FOR NOW
 					case ModifierType::FragileBricks:
-						DeactivateFireBallBuff(ball); 
+						
 						break;
 					case ModifierType::SpeedBoost:
-						DeactivateFireBallBuff(ball);
+						
 						break;
 					//-----------------------------------------------------------------------------
 					default:
@@ -130,13 +136,14 @@ namespace ArkanoidGame
 					if ((!hasBrokeOneBrick) && brick->CheckCollision(ball))
 					{
 						auto glassBrick = dynamic_cast<GlassBrick*>(brick.get());
+						auto unbreackableBrick = dynamic_cast<UnbreackableBrick*>(brick.get());
 						if (!glassBrick)
 						{
 							hasBrokeOneBrick = true;
 							const auto ballPos = ball->GetPosition();
 							const auto brickRect = brick->GetRect();
 							
-							if (!isFireBallActive) //FireBall does not invert from bricks
+							if (!isFireBallActive || unbreackableBrick) //FireBall does not invert from bricks
 							{
 								GetBallInverse(ballPos, brickRect, needInverseDirX, needInverseDirY);
 							}
@@ -294,13 +301,32 @@ namespace ArkanoidGame
 			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		case 2:
-			gameObjects.emplace_back(std::make_shared<FragileBricksModifier>(sf::Vector2f({ posX, posY })));
+			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		case 3:
-			gameObjects.emplace_back(std::make_shared<SppedBoostModifier>(sf::Vector2f({ posX, posY })));
+			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		default:
 			break;
 		}
 	}
+
+	//-----------------------------------------------------------------------------
+
+	void GameStatePlayingData::ActivateFireBallBuff(std::shared_ptr<Ball> ball)
+	{
+		ball = std::make_shared<FireBallDecorator>(ball);
+		ball->AddObserver(weak_from_this());
+		gameObjects[1] = ball;
+		isFireBallActive = true;
+	}
+	void GameStatePlayingData::DeactivateFireBallBuff(std::shared_ptr<Ball> ball)
+	{
+		ball = std::make_shared<Ball>(ball->GetPosition(), ball->GetDirection());
+		gameObjects[1] = ball;
+		ball->AddObserver(weak_from_this());
+		isFireBallActive = false;
+		isTimeToRemoveFireBall = false;
+	}
+	//-----------------------------------------------------------------------------
 }

@@ -68,7 +68,7 @@ namespace ArkanoidGame
 
 	void Ball::restart()
 	{
-		GameObject::restart();
+		GameObject::sprite.setPosition(SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT / 2.f);
 		const float angle = 90;
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
