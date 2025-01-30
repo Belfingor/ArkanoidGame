@@ -8,15 +8,6 @@
 
 namespace ArkanoidGame
 {
-	enum class GameOptions: std::uint8_t
-	{
-		InfiniteApples = 1 << 0,
-		WithAcceleration = 1 << 1,
-
-		Default = InfiniteApples | WithAcceleration,
-		Empty = 0
-	};
-
 	enum class GameStateChangeType
 	{
 		None,
@@ -45,9 +36,6 @@ namespace ArkanoidGame
 		Game();
 		~Game();
 
-		bool IsEnableOptions(GameOptions option) const;
-		void SetOption(GameOptions option, bool value);
-
 		const RecordsTable& GetRecordsTable() const { return recordsTable; }
 
 		// Remove current game state from the stack
@@ -73,7 +61,6 @@ namespace ArkanoidGame
 		GameStateType pendingGameStateType = GameStateType::None;
 		bool pendingGameStateIsExclusivelyVisible = false;
 
-		GameOptions options = GameOptions::Default;
 		RecordsTable recordsTable;
 	};
 }

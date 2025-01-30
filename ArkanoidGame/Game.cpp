@@ -190,20 +190,4 @@ namespace ArkanoidGame
 		pendingGameStateIsExclusivelyVisible = false;
 		stateChangeType = GameStateChangeType::Switch;
 	}
-
-	bool Game::IsEnableOptions(GameOptions option) const
-	{
-		const bool isEnable = ((std::uint8_t)options & (std::uint8_t)option) != (std::uint8_t)GameOptions::Empty;
-		return isEnable;
-	}
-
-	void Game::SetOption(GameOptions option, bool value)
-	{
-		if (value) {
-			options = (GameOptions)((std::uint8_t)options | (std::uint8_t)option);
-		}
-		else {
-			options = (GameOptions)((std::uint8_t)options & ~(std::uint8_t)option);
-		}
-	}
 }

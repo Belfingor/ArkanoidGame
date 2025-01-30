@@ -17,44 +17,6 @@ namespace ArkanoidGame
 			Application::Instance().GetGame().StartGame();
 			};
 		
-		const bool isInfiniteApples = Application::Instance().GetGame().IsEnableOptions(GameOptions::InfiniteApples);
-		MenuItem optionsInfiniteApplesItem;
-		optionsInfiniteApplesItem.text.setString("Infinite Apples: " + std::string(isInfiniteApples ? "On" : "Off"));
-		optionsInfiniteApplesItem.text.setFont(font);
-		optionsInfiniteApplesItem.text.setCharacterSize(24);
-		optionsInfiniteApplesItem.onPressCallback = [](MenuItem& item) {
-			Game& game = Application::Instance().GetGame();
-			bool newOptionValue = !game.IsEnableOptions(GameOptions::InfiniteApples);
-			game.SetOption(GameOptions::InfiniteApples, newOptionValue);
-			item.text.setString("Infinite Apples: " + std::string(newOptionValue ? "On" : "Off"));
-			};
-
-		const bool isWithAcceleration = Application::Instance().GetGame().IsEnableOptions(GameOptions::WithAcceleration);
-		MenuItem optionsWithAccelerationItem;
-		optionsWithAccelerationItem.text.setString("With Acceleration: " + std::string(isWithAcceleration ? "On" : "Off"));
-		optionsWithAccelerationItem.text.setFont(font);
-		optionsWithAccelerationItem.text.setCharacterSize(24);
-		optionsWithAccelerationItem.onPressCallback = [](MenuItem& item) {
-			Game& game = Application::Instance().GetGame();
-			bool newOptionValue = !game.IsEnableOptions(GameOptions::WithAcceleration);
-			game.SetOption(GameOptions::WithAcceleration, newOptionValue);
-			item.text.setString("With Acceleration: " + std::string(newOptionValue ? "On" : "Off"));
-			};
-
-		MenuItem options;
-		options.text.setString("Options");
-		options.text.setFont(font);
-		options.text.setCharacterSize(24);
-		options.hintText.setString("Options");
-		options.hintText.setFont(font);
-		options.hintText.setCharacterSize(48);
-		options.hintText.setFillColor(sf::Color::Red);
-		options.childrenOrientation = Orientation::Vertical;
-		options.childrenAlignment = Alignment::Middle;
-		options.childrenSpacing = 10.f;
-		options.childrens.push_back(optionsInfiniteApplesItem);
-		options.childrens.push_back(optionsWithAccelerationItem);
-		
 		MenuItem recordsItem;
 		recordsItem.text.setString("Records");
 		recordsItem.text.setFont(font);
@@ -102,7 +64,6 @@ namespace ArkanoidGame
 		mainMenu.childrenAlignment = Alignment::Middle;
 		mainMenu.childrenSpacing = 10.f;
 		mainMenu.childrens.push_back(startGame);
-		mainMenu.childrens.push_back(options);
 		mainMenu.childrens.push_back(recordsItem);
 		mainMenu.childrens.push_back(exitGameItem);
 		
