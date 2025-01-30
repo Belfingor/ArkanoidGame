@@ -76,6 +76,9 @@
     <ClCompile Include="Modifier.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="GameStateGameWon.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -152,6 +155,9 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Modifier.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateGameWon.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

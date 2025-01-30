@@ -23,16 +23,8 @@ namespace ArkanoidGame
 		gameOverText.setFont(font);
 		gameOverText.setCharacterSize(48);
 		gameOverText.setStyle(sf::Text::Bold);
-		if (isGameLost == true)
-		{
-			gameOverText.setFillColor(sf::Color::Red);
-			gameOverText.setString("GAME OVER");
-		}
-		else 
-		{
-			gameOverText.setFillColor(sf::Color::Green);
-			gameOverText.setString("YOU WIN");
-		}
+		gameOverText.setFillColor(sf::Color::Red);
+		gameOverText.setString("GAME OVER");
 
 		std::multimap<int, std::string> sortedRecordsTable;
 		Game& game = Application::Instance().GetGame();

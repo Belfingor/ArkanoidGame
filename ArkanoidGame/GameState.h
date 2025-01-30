@@ -11,6 +11,7 @@ namespace ArkanoidGame
 		MainMenu,
 		Playing,
 		GameOver,
+		GameWon,
 		PauseMenu,
 		Records,
 		AddToRecords
