@@ -39,28 +39,13 @@ namespace ArkanoidGame
 		void ActivateFireBallBuff(std::shared_ptr<Ball>ball);
 		void DeactivateFireBallBuff(std::shared_ptr<Ball>ball);
 
+		void ActivatFragileBricksBuff(std::shared_ptr<Brick> brick);
 
-		void StartBuffTimer()
-		{
-			buffRemainingTime = buffDurationTime;
-			isBuffTimerStarted = true;
-		}
-
-		void UpdateBuffTimer(float timeDelta)
-		{
-			if (!isBuffTimerStarted) return;
-			buffRemainingTime -= timeDelta;
-			if (buffRemainingTime <= 0.f)
-			{
-				buffRemainingTime = 0.f;
-				isTimeToRemoveFireBall = true;
-				isBuffTimerStarted = false;
-			}
-		}
-
-
-
-
+		void DeactivatFragileBricksBuff(std::shared_ptr<Brick> brick);
+		
+		//-----------------------------------------------------------------------------
+		void StartBuffTimer();
+		void UpdateBuffTimer(float timeDelta);
 		//-----------------------------------------------------------------------------
 		// Resources
 		sf::Font font;
@@ -93,6 +78,7 @@ namespace ArkanoidGame
 		float buffDurationTime = SETTINGS.BUFF_DURATION;
 		float buffRemainingTime = 0.f;
 		bool isFireBallActive = false;
-		bool isTimeToRemoveFireBall = false;
+		bool isFragileBricksActive = false;
+		bool isTimeToRemoveBuff = false;
 	};
 }

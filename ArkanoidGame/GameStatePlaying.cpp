@@ -86,9 +86,17 @@ namespace ArkanoidGame
 		
 		// Check if need to deactivate any buffs
 		UpdateBuffTimer(timeDelta);
-		if (isTimeToRemoveFireBall)
+		if (isTimeToRemoveBuff)
 		{
 			DeactivateFireBallBuff(ball);
+			if (isFragileBricksActive)
+			{
+				for (auto brick : bricks)
+				{
+					DeactivatFragileBricksBuff(brick);
+				}
+				isFragileBricksActive = false;
+			}
 		}
 
 		auto isCollision = platform->CheckCollision(ball); 
@@ -103,13 +111,30 @@ namespace ArkanoidGame
 					switch (Mod->GetModifierType())
 					{
 					case ModifierType::FireBall:
+						
+						for (auto brick : bricks)
+						{
+							DeactivatFragileBricksBuff(brick);
+						}
+						isFragileBricksActive = false;
 						ActivateFireBallBuff(ball);
-						StartBuffTimer();
 						break;
 					//-----------------------------------------------------------------------------
 					case ModifierType::FragileBricks:
 						
+						DeactivateFireBallBuff(ball);
+						if (!isFragileBricksActive)
+						{
+							for (auto brick : bricks)
+							{
+								ActivatFragileBricksBuff(brick);
+							}
+							isFragileBricksActive = true;
+							isTimeToRemoveBuff = false;
+						}
+						StartBuffTimer(); //need to start timer separately as will be initiated for each brick otherwise
 						break;
+					//-----------------------------------------------------------------------------
 					case ModifierType::SpeedBoost:
 						
 						break;
@@ -140,8 +165,8 @@ namespace ArkanoidGame
 						if (!glassBrick)
 						{
 							hasBrokeOneBrick = true;
-							const auto ballPos = ball->GetPosition();
-							const auto brickRect = brick->GetRect();
+							const auto &ballPos = ball->GetPosition();
+							const auto &brickRect = brick->GetRect();
 							
 							if (!isFireBallActive || unbreackableBrick) //FireBall does not invert from bricks
 							{
@@ -301,10 +326,10 @@ namespace ArkanoidGame
 			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		case 2:
-			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
+			gameObjects.emplace_back(std::make_shared<FragileBricksModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		case 3:
-			gameObjects.emplace_back(std::make_shared<FireBallModifier>(sf::Vector2f({ posX, posY })));
+			gameObjects.emplace_back(std::make_shared<FragileBricksModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		default:
 			break;
@@ -319,6 +344,7 @@ namespace ArkanoidGame
 		ball->AddObserver(weak_from_this());
 		gameObjects[1] = ball;
 		isFireBallActive = true;
+		StartBuffTimer();
 	}
 	void GameStatePlayingData::DeactivateFireBallBuff(std::shared_ptr<Ball> ball)
 	{
@@ -326,7 +352,34 @@ namespace ArkanoidGame
 		gameObjects[1] = ball;
 		ball->AddObserver(weak_from_this());
 		isFireBallActive = false;
-		isTimeToRemoveFireBall = false;
+		isTimeToRemoveBuff = false;
+	}
+	void GameStatePlayingData::ActivatFragileBricksBuff(std::shared_ptr<Brick> brick)
+	{
+		brick->GetState()->ApplySingleHitBuff(*brick);
+	}
+	void GameStatePlayingData::DeactivatFragileBricksBuff(std::shared_ptr<Brick> brick)
+	{
+		brick->GetState()->RevertSingleHitBuff(*brick);
+	}
+
+	//-----------------------------------------------------------------------------
+
+	void GameStatePlayingData::StartBuffTimer()
+	{
+		buffRemainingTime = buffDurationTime;
+		isBuffTimerStarted = true;
+	}
+	void GameStatePlayingData::UpdateBuffTimer(float timeDelta)
+	{
+		if (!isBuffTimerStarted) return;
+		buffRemainingTime -= timeDelta;
+		if (buffRemainingTime <= 0.f)
+		{
+			buffRemainingTime = 0.f;
+			isTimeToRemoveBuff = true;
+			isBuffTimerStarted = false;
+		}
 	}
 	//-----------------------------------------------------------------------------
 }

@@ -114,7 +114,7 @@ namespace ArkanoidGame
 				{
 					pair.second = playerScore;
 				}
-				return true;
+				return true; 
 			}
 		}
 		return false;

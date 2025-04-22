@@ -12,9 +12,11 @@ namespace ArkanoidGame
 		hitCount -= 1;
 		Emit();
 	}
-	Brick::Brick(const sf::Vector2f& position, const sf::Color& color) : GameObject(SETTINGS.RESOURCES_PATH + TEXTURE_PATH, position, SETTINGS.BRICK_WIDTH, SETTINGS.BRICK_HEIGHT)
+	Brick::Brick(const sf::Vector2f& position, const sf::Color& color) : 
+		GameObject(SETTINGS.RESOURCES_PATH + TEXTURE_PATH, position, SETTINGS.BRICK_WIDTH, SETTINGS.BRICK_HEIGHT)
 	{
 		sprite.setColor(color);
+		brickState = std::make_unique<NormalBrickState>(hitCount);
 	}
 	Brick::~Brick()
 	{
@@ -35,6 +37,27 @@ namespace ArkanoidGame
 	bool Brick::IsBroken()
 	{
 		return hitCount <= 0;
+	}
+
+	int Brick::GetOriginalHitCount() const { return originalHitCount; }
+
+	//------States------//
+
+	void Brick::SetState(std::unique_ptr<iBrickState> newState)
+	{
+		brickState = std::move(newState);
+	}
+	void Brick::ApplySingleHitBuff()
+	{
+		brickState->ApplySingleHitBuff(*this);
+	}
+	void Brick::RevertSingleHitBuff()
+	{
+		brickState->RevertSingleHitBuff(*this);
+	}
+	void Brick::SetHitCount(int hitCount)
+	{
+		this->hitCount = hitCount;
 	}
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
 	void SimpleBrick::OnHit()
@@ -89,8 +112,9 @@ namespace ArkanoidGame
 	//--------------------------------------------------------------------------------//--------------------------------------------------------------------------------
 	MultiHitBrick::MultiHitBrick(const sf::Vector2f& position, const sf::Color& color) : Brick(position, color), color(color)
 	{
-		hitCount = SETTINGS.MULTIHIT_BRICK_HITPOINTS;
 		scoreContainer = SETTINGS.MULTIHIT_BRICK_SCORE;
+		originalHitCount = SETTINGS.MULTIHIT_BRICK_HITPOINTS;
+		hitCount = originalHitCount;
 	}
 	void MultiHitBrick::OnHit()
 	{

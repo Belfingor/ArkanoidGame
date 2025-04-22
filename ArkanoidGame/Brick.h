@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <cassert>
+#include <memory> 
 #include "GameSettings.h"
 #include "Sprite.h"
 #include "Math.h"
@@ -8,14 +9,19 @@
 #include "iCollidable.h"
 #include "iDelayedAction.h"
 #include "Iobserver.h"
+#include "iBrickState.h"
 
 namespace ArkanoidGame
 {
-	class Brick : public GameObject, public iCollidable, public IObservable
+	class Brick : public GameObject, public iCollidable, public IObservable  //,public iBrickState
 	{
 	protected:
 		void OnHit() override;
-		int hitCount = 1;
+		int originalHitCount = 1;
+		int hitCount = originalHitCount;
+
+	private:
+		std::unique_ptr<iBrickState> brickState; //Pointer to the current state
 		
 	public:
 		Brick (const sf::Vector2f& position, const sf::Color& color = sf::Color::White);
@@ -23,6 +29,15 @@ namespace ArkanoidGame
 		bool GetCollision(std::shared_ptr<iCollidable> collidable) const override;
 		void Update(float timeDelta) override;
 		bool IsBroken();
+		int GetOriginalHitCount()const;
+
+		//------States------//
+		iBrickState* GetState() const { return brickState.get(); }
+		void SetState(std::unique_ptr<iBrickState> newState);
+		void ApplySingleHitBuff();
+		void RevertSingleHitBuff();
+		void SetHitCount(int hitCount);
+		//------------------//
 
 		int scoreContainer = 1;
 	};
@@ -67,8 +82,6 @@ namespace ArkanoidGame
 		bool GetCollision(std::shared_ptr<iCollidable> collidableObject) const override;
 		void FinalAction();
 		void EachTickAction(float deltaTime);
-
-
 	};
 	//--------------------------------------------------------------------------------
 	class GlassBrick : public Brick, public iDelayedAction

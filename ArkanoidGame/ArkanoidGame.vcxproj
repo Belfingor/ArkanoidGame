@@ -169,6 +169,7 @@
     <ClCompile Include="GameStateAddToRecordsTable.cpp" />
     <ClCompile Include="GameStateData.cpp" />
     <ClCompile Include="GameStateGameWon.cpp" />
+    <ClCompile Include="iBrickState.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Modifier.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="BrickFactory.h" />
     <ClInclude Include="GameStateAddToRecordsTable.h" />
     <ClInclude Include="GameStateGameWon.h" />
+    <ClInclude Include="iBrickState.h" />
     <ClInclude Include="iCollidable.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
