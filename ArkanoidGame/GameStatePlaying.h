@@ -40,8 +40,10 @@ namespace ArkanoidGame
 		void DeactivateFireBallBuff(std::shared_ptr<Ball>ball);
 
 		void ActivatFragileBricksBuff(std::shared_ptr<Brick> brick);
-
 		void DeactivatFragileBricksBuff(std::shared_ptr<Brick> brick);
+
+		void ActivateWidePlatformBuff(std::shared_ptr<Platform> platform);
+		void DeactivateWidePlatformBuff(std::shared_ptr<Platform> platform);
 		
 		//-----------------------------------------------------------------------------
 		void StartBuffTimer();
@@ -79,6 +81,7 @@ namespace ArkanoidGame
 		float buffRemainingTime = 0.f;
 		bool isFireBallActive = false;
 		bool isFragileBricksActive = false;
+		bool isWidePlatformActive = false;
 		bool isTimeToRemoveBuff = false;
 	};
 }

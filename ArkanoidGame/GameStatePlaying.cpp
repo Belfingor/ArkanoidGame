@@ -97,6 +97,7 @@ namespace ArkanoidGame
 				}
 				isFragileBricksActive = false;
 			}
+			DeactivateWidePlatformBuff(platform);
 		}
 
 		auto isCollision = platform->CheckCollision(ball); 
@@ -112,17 +113,25 @@ namespace ArkanoidGame
 					{
 					case ModifierType::FireBall:
 						
-						for (auto brick : bricks)
+						if (isFragileBricksActive || isWidePlatformActive)
 						{
-							DeactivatFragileBricksBuff(brick);
+							for (auto brick : bricks)
+							{
+								DeactivatFragileBricksBuff(brick);
+							}
+							isFragileBricksActive = false;
+							DeactivateWidePlatformBuff(platform);
 						}
-						isFragileBricksActive = false;
 						ActivateFireBallBuff(ball);
 						break;
 					//-----------------------------------------------------------------------------
 					case ModifierType::FragileBricks:
 						
-						DeactivateFireBallBuff(ball);
+						if (isFireBallActive || isWidePlatformActive)
+						{
+							DeactivateFireBallBuff(ball);
+							DeactivateWidePlatformBuff(platform);
+						}
 						if (!isFragileBricksActive)
 						{
 							for (auto brick : bricks)
@@ -135,8 +144,18 @@ namespace ArkanoidGame
 						StartBuffTimer(); //need to start timer separately as will be initiated for each brick otherwise
 						break;
 					//-----------------------------------------------------------------------------
-					case ModifierType::SpeedBoost:
+					case ModifierType::WidePlatform:
 						
+						if (isFireBallActive || isFragileBricksActive)
+						{
+							for (auto brick : bricks)
+							{
+								DeactivatFragileBricksBuff(brick);
+							}
+							isFragileBricksActive = false;
+							DeactivateFireBallBuff(ball);
+						}
+						ActivateWidePlatformBuff(platform);
 						break;
 					//-----------------------------------------------------------------------------
 					default:
@@ -329,7 +348,7 @@ namespace ArkanoidGame
 			gameObjects.emplace_back(std::make_shared<FragileBricksModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		case 3:
-			gameObjects.emplace_back(std::make_shared<FragileBricksModifier>(sf::Vector2f({ posX, posY })));
+			gameObjects.emplace_back(std::make_shared<WidePlatformModifier>(sf::Vector2f({ posX, posY })));
 			break;
 		default:
 			break;
@@ -354,13 +373,29 @@ namespace ArkanoidGame
 		isFireBallActive = false;
 		isTimeToRemoveBuff = false;
 	}
-	void GameStatePlayingData::ActivatFragileBricksBuff(std::shared_ptr<Brick> brick)
+
+	void GameStatePlayingData::ActivatFragileBricksBuff(std::shared_ptr<Brick> brick) //Done for a single brick, so need to iterate over all bricks with this func
 	{
 		brick->GetState()->ApplySingleHitBuff(*brick);
 	}
 	void GameStatePlayingData::DeactivatFragileBricksBuff(std::shared_ptr<Brick> brick)
 	{
 		brick->GetState()->RevertSingleHitBuff(*brick);
+	}
+
+	void GameStatePlayingData::ActivateWidePlatformBuff(std::shared_ptr<Platform> platform)
+	{
+		platform = std::make_shared<WidePlatformDecorator>(platform);
+		gameObjects[0] = platform;
+		isWidePlatformActive = true;
+		StartBuffTimer();
+	}
+	void GameStatePlayingData::DeactivateWidePlatformBuff(std::shared_ptr<Platform> platform)
+	{
+		platform = std::make_shared<Platform>(platform->GetPosition());
+		gameObjects[0] = platform;
+		isWidePlatformActive = false;
+		isTimeToRemoveBuff = false;
 	}
 
 	//-----------------------------------------------------------------------------

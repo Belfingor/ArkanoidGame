@@ -68,4 +68,12 @@ namespace ArkanoidGame
 		return std::fabs(ballPos.y - rect.top) <= SETTINGS.BALL_SIZE / 2.f;
 	}
 
+	//----------------------------------------------------------------------------- Platform Decorator -----------------------------------------------------------------------------//
+
+	WidePlatformDecorator::WidePlatformDecorator(std::shared_ptr<Platform> platform) : Platform(platform->GetPosition()), decoratedPlatform(platform)
+	{
+		assert(decoratedPlatform);
+		SetSpriteSize(sprite, SETTINGS.WIDE_PLATFORM_WDTH, SETTINGS.WIDE_PLATFORM_HEIGHT);
+	}
+
 }

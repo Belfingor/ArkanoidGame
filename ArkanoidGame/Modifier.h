@@ -13,7 +13,7 @@ namespace ArkanoidGame
 	{
 		FireBall,
 		FragileBricks,
-		SpeedBoost,
+		WidePlatform,
 		Default
 	};
 
@@ -47,11 +47,11 @@ namespace ArkanoidGame
 		ModifierType GetModifierType() const override;
 	};
 	//-----------------------------------------------------------------------------
-	class SppedBoostModifier final : public Modifier
+	class WidePlatformModifier final : public Modifier
 	{
 	public:
-		SppedBoostModifier(const sf::Vector2f& position, const std::string& texturePath = SETTINGS.SPEEDBOOST_MODIFIER_TEXTURE_PATH);
-		~SppedBoostModifier() = default;
+		WidePlatformModifier(const sf::Vector2f& position, const std::string& texturePath = SETTINGS.SPEEDBOOST_MODIFIER_TEXTURE_PATH);
+		~WidePlatformModifier() = default;
 		ModifierType GetModifierType() const override;
 	};
 }

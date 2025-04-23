@@ -11,7 +11,7 @@
 namespace ArkanoidGame
 {
 
-	class Platform final : public GameObject, public iCollidable
+	class Platform : public GameObject, public iCollidable
 	{
 	public:
 		Platform(const sf::Vector2f& position);
@@ -28,4 +28,16 @@ namespace ArkanoidGame
 
 		void MovePlatform(float speed);
  	};
+
+	//----------------------------------------------------------------------------- Platform Decorator -----------------------------------------------------------------------------//
+
+	class WidePlatformDecorator final : public Platform
+	{
+	protected:
+		std::shared_ptr<Platform> decoratedPlatform;
+	public:
+		WidePlatformDecorator(std::shared_ptr<Platform> platform);
+	};
+
+
 }
