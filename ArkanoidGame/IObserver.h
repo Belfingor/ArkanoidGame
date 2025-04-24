@@ -18,13 +18,13 @@ protected:
 	{
 		auto self = shared_from_this();
 		std::for_each(observers.begin(), observers.end(), [self](auto observer)
+		{
+			auto lockedObserver = observer.lock();
+			if (lockedObserver)
 			{
-				auto lockedObserver = observer.lock();
-				if (lockedObserver)
-				{
-					lockedObserver->Notify(self);
-				}
-			});
+				lockedObserver->Notify(self);
+			}
+		});
 	}
 
 private:

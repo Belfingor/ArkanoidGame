@@ -65,8 +65,6 @@ namespace ArkanoidGame
 			{
 				currentPos.y += itemRect.height + spacing;
 			}
-
-			
 		}
 	}
 }

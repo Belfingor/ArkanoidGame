@@ -34,7 +34,6 @@ namespace ArkanoidGame
 	{
 	public:
 		FireBallModifier(const sf::Vector2f& position, const std::string& texturePath = SETTINGS.FIREBALL_MODIFIER_TEXTURE_PATH);
-
 		~FireBallModifier() = default;
 		ModifierType GetModifierType() const override;
 	};

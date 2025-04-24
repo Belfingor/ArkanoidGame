@@ -26,6 +26,10 @@ namespace ArkanoidGame
 		gameOverText.setFillColor(sf::Color::Red);
 		gameOverText.setString("GAME OVER");
 
+		gainedScoreText.setFont(font);
+		gainedScoreText.setCharacterSize(24);
+		gainedScoreText.setString("Score: " + std::to_string(RECORDS->playerScore));
+
 		std::multimap<int, std::string> sortedRecordsTable;
 		Game& game = Application::Instance().GetGame();
 		for (const auto& item : game.GetRecordsTable())
@@ -81,10 +85,14 @@ namespace ArkanoidGame
 		background.setOrigin(0.f, 0.f);
 		background.setSize(viewSize);
 		window.draw(background);
-
 		gameOverText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 3.5f }));
+
 		gameOverText.setPosition(viewSize.x / 2.f, viewSize.y / 2 - 50.f);
 		window.draw(gameOverText);
+
+		gainedScoreText.setOrigin(.7f, .5f);
+		gainedScoreText.setPosition(gameOverText.getPosition().x - 40.f, gameOverText.getPosition().y);
+		window.draw(gainedScoreText);
 
 		sf::Vector2f tablePosition = { viewSize.x / 10.f, viewSize.y / 2.f };
 		DrawTextList(window, RECORDS->ConvertRecordsTextToMainMenuText(), 10.f, Orientation::Vertical, Alignment::Min, tablePosition, { .5f, .0f });

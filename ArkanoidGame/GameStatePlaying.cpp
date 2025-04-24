@@ -200,7 +200,7 @@ namespace ArkanoidGame
 
 						// Init modifier on collision with any brick with 10% chance
 						int modifierProcChance = 1 + (rand() % 10);
-						if (modifierProcChance > 2) //replace 2 with 5 later on
+						if (modifierProcChance == 1) // 10% proc chance
 						{
 							ChooseRandomModifierToInit(brick->GetPosition().x, brick->GetPosition().y);
 						}

@@ -23,8 +23,4 @@ namespace ArkanoidGame
 		sf::Font font;
 		Menu menu;
 	};
-
-
-
-
 }

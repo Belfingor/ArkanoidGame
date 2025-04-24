@@ -55,9 +55,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateData.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Brick.cpp">
       <Filter>Sources</Filter>
     </ClCompile>

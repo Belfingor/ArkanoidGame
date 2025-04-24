@@ -25,5 +25,6 @@ namespace ArkanoidGame
 		sf::RectangleShape background;
 		sf::Text gameOverText;
 		sf::Text hintText;
+		sf::Text gainedScoreText;
 	};
 }

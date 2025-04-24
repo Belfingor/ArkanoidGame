@@ -167,7 +167,6 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateAddToRecordsTable.cpp" />
-    <ClCompile Include="GameStateData.cpp" />
     <ClCompile Include="GameStateGameWon.cpp" />
     <ClCompile Include="iBrickState.cpp" />
     <ClCompile Include="LevelLoader.cpp" />

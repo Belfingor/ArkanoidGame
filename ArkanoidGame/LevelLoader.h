@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Brick.h"
 
 #include <vector>

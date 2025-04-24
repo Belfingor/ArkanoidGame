@@ -25,8 +25,6 @@ namespace ArkanoidGame
 
 	class SingleHitBrickState : public iBrickState
 	{
-	private:
-
 	public:
 		SingleHitBrickState(int hitCount) {}
 		void ApplySingleHitBuff(Brick& brick) override;

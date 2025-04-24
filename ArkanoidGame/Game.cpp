@@ -20,7 +20,7 @@ namespace ArkanoidGame
 	}
 	void Game::WinGame()
 	{
-		PushState(GameStateType::GameWon, false); /////////////// ADD GAMEWIN STATE HERE
+		PushState(GameStateType::GameWon, false);
 	}
 	void Game::LoseGame()
 	{
